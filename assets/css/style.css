@@ -14,12 +14,29 @@ header {
 	margin: 10% 0;
 }
 
+.home-small {
+	margin: 25% 0;
+}
+
 .form-control {
 	padding: 30px 10px;
 	font-size: 20px;
 }
 
+.form-control-small {
+	padding: 0px;
+}
+
 .btn-default {
 	padding: 16px;
 	font-size: 20px;
+}
+
+.btn-default-small {
+	padding: 1px;
+}
+
+.radio-button {
+	text-align: center;
+	margin: 0px 30px;
 }
