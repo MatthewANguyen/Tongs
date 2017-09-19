@@ -11,7 +11,12 @@ header {
 }
 
 .home {
-	margin: 10% 0;
+	margin: 10% 0px;
+}
+
+.search {
+	margin: 5px 0;
+	width: 100%;
 }
 
 .home-small {
@@ -27,16 +32,17 @@ header {
 	padding: 0px;
 }
 
-.btn-default {
-	padding: 16px;
-	font-size: 20px;
+.btn {
+	width: 20%;
+	text-align: center;
 }
 
-.btn-default-small {
-	padding: 1px;
+.btn-nav {
+	width: 40%;
 }
 
 .radio-button {
+	font-size: 15px;
 	text-align: center;
-	margin: 0px 30px;
+	padding: : 0px 60px;
 }
