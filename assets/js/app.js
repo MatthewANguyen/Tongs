@@ -14,7 +14,7 @@
               height: '390',
               width: '640',
               videoId: 'Sx4t0sDRcS8',
-              playerVars: {'controls': 0},
+              playerVars: { 'controls': 0 },
               events: {
                   'onReady': onPlayerReady,
                   'onStateChange': onPlayerStateChange
@@ -34,7 +34,7 @@
 
       function onPlayerStateChange(event) {
           if (event.data == YT.PlayerState.PLAYING && !done) {
-              setTimeout(stopVideo, 6000);
+              setTimeout(stopVideo, 10000);
               done = true;
           }
       }
@@ -42,3 +42,15 @@
       function stopVideo() {
           player.stopVideo();
       }
+
+
+
+
+
+     // toQueryString: function() {
+     //    var queryString = '';
+     //    for (var i in this.queryParams) {
+     //      queryString += '&' + i + '=' + this.queryParams[i];
+     //    }
+     //    return this.baseUrl + '?' + queryString.trim('&');
+     //  }
