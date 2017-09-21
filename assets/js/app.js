@@ -52,6 +52,7 @@
           player.stopVideo();
       }
 
+<<<<<<< HEAD
       function toQueryString() {
           var baseUrl = "https://www.googleapis.com/youtube/v3/search"
           var qString = '';
@@ -77,4 +78,17 @@
             //onYouTubeIframeAPIReady(response.id)
           });
 
-              
+
+=======
+
+
+
+
+     // toQueryString: function() {
+     //    var queryString = '';
+     //    for (var i in this.queryParams) {
+     //      queryString += '&' + i + '=' + this.queryParams[i];
+     //    }
+     //    return this.baseUrl + '?' + queryString.trim('&');
+     //  }
+>>>>>>> d48d587faee3a1dcc8809e5383e3a10e4db16802
