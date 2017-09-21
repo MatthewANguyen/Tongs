@@ -84,6 +84,7 @@
       // })
 
       $.ajax({
+<<<<<<< HEAD
               url: toQueryString(),
               method: "GET",
               dataType: "json"
@@ -91,3 +92,36 @@
             //response == json tree
             //onYouTubeIframeAPIReady(response.id)
           });
+=======
+          url: toQueryString(),
+          method: "GET",
+          dataType: "json"
+      }).done(function(response) {
+          //response == json tree
+          //onYouTubeIframeAPIReady(response.id)
+      });
+
+      function displaySearch(isVideo) {
+        $("main-display").empty();
+        if(isVideo) {
+          var preview = $("<div>");
+          preview
+            .append($("<h1>").text(/*Title*/))
+            .append($("<div>").append(/*Thumbnail*/))
+            .on("click", function {
+              displayMashup();
+            })
+        }
+      }
+
+      function displayMashup()
+
+      // toQueryString: function() {
+      //    var queryString = '';
+      //    for (var i in this.queryParams) {
+      //      queryString += '&' + i + '=' + this.queryParams[i];
+      //    }
+      //    return this.baseUrl + '?' + queryString.trim('&');
+      //  }
+   
+>>>>>>> c987821468aae89ebf0319db4345e384601e49c6
