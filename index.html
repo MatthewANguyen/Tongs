@@ -1,53 +1,52 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<title>Tongs</title>
-	<link rel="stylesheet" type="text/css" href="assets/css/reset.css">
-	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="assets/css/style.css">
-	<link href="https://fonts.googleapis.com/css?family=Yantramanav" rel="stylesheet">
-	<script src="https://code.jquery.com/jquery.js"></script>
+    <title>Tongs</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/reset.css">
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Yantramanav" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery.js"></script>
     <script src="https://apis.google.com/js/client.js?onload=googleApiClientReady"></script>
-     <script src="https://www.youtube.com/iframe_api"></script>
-	<script type="text/javascript" src="./assets/js/app.js"></script>
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.3.1/firebase.js"></script>
+    <script type="text/javascript" src="./assets/js/app.js"></script>
 </head>
+
 <body>
-	<div class="container">
-		<div class="row">
-			<div class="col-md-2">
-
-			</div>
-			<div class="col-md-8">
-				<header>Tongs</header>
-			</div>
-
-				<!-- <div id="player"></div> -->
-			<div class="col-md-2">
-				<div class="input-group home-small">
-			    	<div class="input-group search">
-			    	<input type="text" id="search-input" class="form-control-small" placeholder="Search for...">
-					</div>
-					<button type="button" id="video" class="btn-nav btn-primary btn-sm">Video</button>
-					<button type="button" id="song" class="btn-nav btn-secondary btn-sm">Song</button>
-				</div>
-			</div>
-		</div>
-		<div class="row home">
-			<div class="col-md-2">
-
-			</div>
-			<div class="col-md-8">
-				<div class="input-group search">
-			    	<input type="text" id="search-input" class="form-control" placeholder="Search for...">
-				</div>
-				<button type="button" id="video1" class="btn btn-primary btn-lg">Video</button>
-				<button type="button" id="song1" class="btn btn-secondary btn-lg">Song</button>
-			</div>
-			<div id="trending" class="col-md-2">
-
-			</div>
-		</div>
-	</div>
-
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+                <header>Tongs</header>
+            </div>
+            <!-- <div id="player"></div> -->
+            <div class="col-md-2">
+                <div class="input-group home-small">
+                    <div class="input-group search">
+                        <input type="text" id="search-input" class="form-control-small" placeholder="Search for...">
+                    </div>
+                    <button type="button" id="video" class="btn-nav btn-primary btn-sm">Video</button>
+                    <button type="button" id="song" class="btn-nav btn-secondary btn-sm">Song</button>
+                </div>
+            </div>
+        </div>
+        <div class="row home">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-8">
+                <div class="input-group search">
+                    <input type="text" id="search-input" class="form-control" placeholder="Search for...">
+                </div>
+                <button type="button" id="video1" class="btn btn-primary btn-lg">Video</button>
+                <button type="button" id="song1" class="btn btn-secondary btn-lg">Song</button>
+            </div>
+            <div id="trending" class="col-md-2">
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

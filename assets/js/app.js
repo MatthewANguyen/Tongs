@@ -8,6 +8,18 @@
 
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
+
+
+      // Initialize Firebase
+      var config = {
+          apiKey: "AIzaSyC_Bz_Anlmg6SWbW7PcThRkbUAE78CPeQY",
+          authDomain: "tongs-93168.firebaseapp.com",
+          databaseURL: "https://tongs-93168.firebaseio.com",
+          projectId: "tongs-93168",
+          storageBucket: "",
+          messagingSenderId: "316564301089"
+      };
+      firebase.initializeApp(config);
       var player;
 
       var queryString = {
@@ -52,7 +64,8 @@
           player.stopVideo();
       }
 
-<<<<<<< HEAD
+   
+
       function toQueryString() {
           var baseUrl = "https://www.googleapis.com/youtube/v3/search"
           var qString = '';
@@ -63,32 +76,30 @@
           return baseUrl + "?" + qString.trim('&');
       }
 
-       //console.log('', toQueryString());
+      //console.log('', toQueryString());
 
       // $("#search-input").on("click", function() {
       //     console.log('', "hello");
       // })
 
       $.ajax({
-              url: toQueryString(),
-              method: "GET",
-              dataType: "json"
-          }).done(function(response) {
-            //response == json tree
-            //onYouTubeIframeAPIReady(response.id)
-          });
-
-
-=======
+          url: toQueryString(),
+          method: "GET",
+          dataType: "json"
+      }).done(function(response) {
+          //response == json tree
+          //onYouTubeIframeAPIReady(response.id)
+      });
 
 
 
 
-     // toQueryString: function() {
-     //    var queryString = '';
-     //    for (var i in this.queryParams) {
-     //      queryString += '&' + i + '=' + this.queryParams[i];
-     //    }
-     //    return this.baseUrl + '?' + queryString.trim('&');
-     //  }
->>>>>>> d48d587faee3a1dcc8809e5383e3a10e4db16802
+
+      // toQueryString: function() {
+      //    var queryString = '';
+      //    for (var i in this.queryParams) {
+      //      queryString += '&' + i + '=' + this.queryParams[i];
+      //    }
+      //    return this.baseUrl + '?' + queryString.trim('&');
+      //  }
+   
