@@ -8,6 +8,19 @@
 
       // 3. This function creates an <iframe> (and YouTube player)
       //    after the API code downloads.
+
+
+      // Initialize Firebase
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyC2HA7n0Xg2eXr8chPxyWFGr8dgNM6UWbY",
+        authDomain: "tongs-573e7.firebaseapp.com",
+        databaseURL: "https://tongs-573e7.firebaseio.com",
+        projectId: "tongs-573e7",
+        storageBucket: "tongs-573e7.appspot.com",
+        messagingSenderId: "483788713808"
+      };
+      firebase.initializeApp(config);
       var player;
 
       var queryString = {
@@ -52,6 +65,8 @@
           player.stopVideo();
       }
 
+
+
       function toQueryString() {
           var baseUrl = "https://www.googleapis.com/youtube/v3/search"
           var qString = '';
@@ -62,7 +77,7 @@
           return baseUrl + "?" + qString.trim('&');
       }
 
-       //console.log('', toQueryString());
+      //console.log('', toQueryString());
 
       // $("#search-input").on("click", function() {
       //     console.log('', "hello");
@@ -76,5 +91,3 @@
             //response == json tree
             //onYouTubeIframeAPIReady(response.id)
           });
-
-              
