@@ -11,13 +11,14 @@
 
 
       // Initialize Firebase
+      // Initialize Firebase
       var config = {
-          apiKey: "AIzaSyC_Bz_Anlmg6SWbW7PcThRkbUAE78CPeQY",
-          authDomain: "tongs-93168.firebaseapp.com",
-          databaseURL: "https://tongs-93168.firebaseio.com",
-          projectId: "tongs-93168",
-          storageBucket: "",
-          messagingSenderId: "316564301089"
+        apiKey: "AIzaSyC2HA7n0Xg2eXr8chPxyWFGr8dgNM6UWbY",
+        authDomain: "tongs-573e7.firebaseapp.com",
+        databaseURL: "https://tongs-573e7.firebaseio.com",
+        projectId: "tongs-573e7",
+        storageBucket: "tongs-573e7.appspot.com",
+        messagingSenderId: "483788713808"
       };
       firebase.initializeApp(config);
       var player;
