@@ -92,9 +92,20 @@
           //onYouTubeIframeAPIReady(response.id)
       });
 
+      function displaySearch(isVideo) {
+        $("main-display").empty();
+        if(isVideo) {
+          var preview = $("<div>");
+          preview
+            .append($("<h1>").text(/*Title*/))
+            .append($("<div>").append(/*Thumbnail*/))
+            .on("click", function {
+              displayMashup();
+            })
+        }
+      }
 
-
-
+      function displayMashup()
 
       // toQueryString: function() {
       //    var queryString = '';
