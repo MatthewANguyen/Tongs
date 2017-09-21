@@ -1,4 +1,4 @@
-      // 2. This code loads the IFrame Player API code asynchronously.
+// 2. This code loads the IFrame Player API code asynchronously.
       // var tag = document.createElement('script');
 
       // tag.src = "https://www.youtube.com/iframe_api";
@@ -52,7 +52,6 @@
           player.stopVideo();
       }
 
-<<<<<<< HEAD
       function toQueryString() {
           var baseUrl = "https://www.googleapis.com/youtube/v3/search"
           var qString = '';
@@ -78,17 +77,4 @@
             //onYouTubeIframeAPIReady(response.id)
           });
 
-
-=======
-
-
-
-
-     // toQueryString: function() {
-     //    var queryString = '';
-     //    for (var i in this.queryParams) {
-     //      queryString += '&' + i + '=' + this.queryParams[i];
-     //    }
-     //    return this.baseUrl + '?' + queryString.trim('&');
-     //  }
->>>>>>> d48d587faee3a1dcc8809e5383e3a10e4db16802
+              
