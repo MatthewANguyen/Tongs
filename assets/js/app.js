@@ -1,4 +1,4 @@
-      // 2. This code loads the IFrame Player API code asynchronously.
+// 2. This code loads the IFrame Player API code asynchronously.
       // var tag = document.createElement('script');
 
       // tag.src = "https://www.youtube.com/iframe_api";
@@ -68,7 +68,7 @@
           player.stopVideo();
       }
 
-   
+
 
       function toQueryString() {
           var baseUrl = "https://www.googleapis.com/youtube/v3/search"
@@ -81,7 +81,7 @@
       }
 
       //console.log('', toQueryString());
-
+      
       // $("#search-input").on("click", function() {
       //     console.log('', "hello");
       // })
@@ -198,3 +198,52 @@
       //    return this.baseUrl + '?' + queryString.trim('&');
       //  }
    
+      function displayItem(title, videoId, thubmnail){
+        this.title = title;
+        this.audioId = "";
+        this.videoId = videoId;
+        this.thubmnail = thubmnail;
+        this.upvotes = 0;
+      }
+      
+      function display(displayItem, num){
+        if(num === 0){
+          $("#main-display").empty();
+        }//append the new div
+        var displayDiv = $("<div>" + displayItem.title + "</div>");
+        var imgDiv = $("<img src='" + displayItem.thubmnail + "'/>")
+        displayDiv.append(imgDiv)
+        $("#main-display")
+          .append(displayDiv)
+      }
+
+      function ajaxCall(){
+        $.ajax({
+            url: toQueryString(),
+            method: "GET",
+            dataType: "json"
+        }).done(function(response) {
+            displayResults(response);
+          });
+        }
+// CANNOT SEPERATE THESE FUNCTION BECAUSE THE "RESPONSE." CALLS ARE REFERENCING NOTHING. LINES 114 - 117
+        function displayResults(response){
+          console.log("start of for loop");
+          for(var i = 0; 0<response.items.length; i++){   
+            var videoId = response.items[i].id.videoId;
+            var title = response.items[i].snippet.title;
+            console.log("response.items.snippet", response.items[i].snippet.thumbnails)
+            var thubmnail = response.items[i].snippet.thumbnails.default.url;
+            var result  = new displayItem(title, videoId, thubmnail);
+            console.log("about to display the " + i + " element");
+            display(result, i);
+          }
+      }
+$(document).ready(function(){
+      $("#video1").on( "click", function()  {
+        event.preventDefault();
+        queryString.q = $("#search-input1").val().trim();
+        console.log(queryString.q);
+        ajaxCall();
+      });
+})
