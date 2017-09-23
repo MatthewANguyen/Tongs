@@ -1,16 +1,5 @@
-// 2. This code loads the IFrame Player API code asynchronously.
-      // var tag = document.createElement('script');
-
-      // tag.src = "https://www.youtube.com/iframe_api";
-      // var firstScriptTag = document.getElementsByTagName('script')[0];
-      // firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      // <script src="https://www.youtube.com/iframe_api"></script>
-
-      // 3. This function creates an <iframe> (and YouTube player)
-      //    after the API code downloads.
 
 
-      // Initialize Firebase
       // Initialize Firebase
       var config = {
         apiKey: "AIzaSyC2HA7n0Xg2eXr8chPxyWFGr8dgNM6UWbY",
@@ -76,15 +65,8 @@
           for (var i in this.queryString) {
               qString += '&' + i + '=' + this.queryString[i];
           }
-          console.log(qString);
           return baseUrl + "?" + qString.trim('&');
       }
-
-      //console.log('', toQueryString());
-      
-      // $("#search-input").on("click", function() {
-      //     console.log('', "hello");
-      // })
 
       $.ajax({
           url: toQueryString(),
@@ -165,8 +147,6 @@
         // console.log(trendID);
       })
 
-
-
       // function displaySearch(isVideo, jsonTree) {
       //   $("main-display").empty();
       //   for(var i = 0; i < 0 /*amount of videos returned in JSON*/; i++) {
@@ -183,21 +163,6 @@
       //     }
       //   }
       
-
-      // function displayMashup() {
-      //   //$(this).
-      // }
-      
-
-
-      // toQueryString: function() {
-      //    var queryString = '';
-      //    for (var i in this.queryParams) {
-      //      queryString += '&' + i + '=' + this.queryParams[i];
-      //    }
-      //    return this.baseUrl + '?' + queryString.trim('&');
-      //  }
-   
       function displayItem(title, videoId, thubmnail){
         this.title = title;
         this.audioId = "";
@@ -230,16 +195,17 @@
             displayResults(response);
           });
         }
-// CANNOT SEPERATE THESE FUNCTION BECAUSE THE "RESPONSE." CALLS ARE REFERENCING NOTHING. LINES 114 - 117
-        function displayResults(response){
-          console.log("start of for loop");
-          for(var i = 0; 0<response.items.length; i++){   
+
+      function displayResults(response){
+          // console.log("start of for loop");
+          for(var i = 0; i<response.items.length; i++){   
+           
             var videoId = response.items[i].id.videoId;
             var title = response.items[i].snippet.title;
-            console.log("response.items.snippet", response.items[i].snippet.thumbnails)
+            // console.log("response.items.snippet", response.items[i].snippet.thumbnails)
             var thubmnail = response.items[i].snippet.thumbnails.default.url;
             var result  = new displayItem(title, videoId, thubmnail);
-            console.log("about to display the " + i + " element");
+            // console.log("about to display the " + i + " element");
             display(result, i);
           }
       }
@@ -247,7 +213,7 @@ $(document).ready(function(){
       $("#video1").on( "click", function()  {
         event.preventDefault();
         queryString.q = $("#search-input1").val().trim();
-        console.log(queryString.q);
+        // console.log(queryString.q);
         ajaxCall();
       });
 })
