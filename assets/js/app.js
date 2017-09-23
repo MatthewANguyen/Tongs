@@ -211,6 +211,7 @@
           $("#main-display").empty();
         }//append the new div
         var displayDiv = $("<div></div>");
+        displayDiv.addClass("resultCard");
         var titleDiv = $("<h3>" + displayItem.title + "</h3>");
         titleDiv.addClass("titleDisplay");
         var imgDiv = $("<img src='" + displayItem.thubmnail + "'/>");
