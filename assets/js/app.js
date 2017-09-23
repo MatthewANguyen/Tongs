@@ -223,6 +223,7 @@ $(document).ready(function() {
     });
 
 
+
     // $(".resultCard").on("click", function() {
     $("body").on("click", ".resultCard", function() {
         event.preventDefault();
