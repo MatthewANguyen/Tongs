@@ -49,10 +49,9 @@ header {
 
 .tittleDisplay{
 	display: inline;
-
+}
 
 img{
-	display:inline-block;
 	float:left;
 	margin-right:2%;
 	margin-bottom:2%;
