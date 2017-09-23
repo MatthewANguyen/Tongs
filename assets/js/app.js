@@ -79,13 +79,7 @@
           console.log(qString);
           return baseUrl + "?" + qString.trim('&');
       }
-
-      //console.log('', toQueryString());
       
-      // $("#search-input").on("click", function() {
-      //     console.log('', "hello");
-      // })
-
       $.ajax({
           url: toQueryString(),
           method: "GET",
@@ -137,66 +131,39 @@
         return database.ref().child("videos").push(object).key;
       }
 
-      
-
-      function findFirebase_success(res) {
-        console.log("RESPONSE", res);
+      /**
+       * [getRandomVideo use this method to return a random video after a search]
+       * @return {[String]} [the ID of the youtube video from google API]
+       */
+      function getRandomVideo() {
+        console.log("random video return");
+        return database.ref().child("trending").limitToLast(10).once("value").then(function(snapshot) {
+          console.log(snapshot.val());
+          var trendingArray = Object.values(snapshot.val());
+          console.log(trendingArray, Math.floor((Math.random()) * 10));
+          var randomEntry = trendingArray[Math.floor((Math.random()) * 10)]
+          console.log('run before', randomEntry);
+          return randomEntry.audioID;
+        });
       }
 
-      function findFirebase_err(err) {
-        console.error("ERROR - Something went wrong fetching from Firebase", err);
-      }
+      // function findFirebase_success(res) {
+      //   console.log("RESPONSE", res);
+      // }
+
+      // function findFirebase_err(err) {
+      //   console.error("ERROR - Something went wrong fetching from Firebase", err);
+      // }
 
       $(document).ready(function() {
-
-        var trend = {
-          videoID: "matt",
-          audioID: "matt's voice",
-          upvotes: 10000000,
-          videoThumbnail: "picture",
-          title: "karioke"
-        };
+        
+        var randomEntry = getRandomVideo().then(function(data) {
+          console.log('run after', data); 
+        });
 
         $("#test").on('click', function() {
-        console.log("TEST BUTTON CLICKED");
-        findVideoByFirebaseID('-KuXauXkh6mlz7Ai4Mi9', findFirebase_success, findFirebase_err);
       });
-        // var trendID = addVideo(trend);
-        // console.log(trendID);
       })
-
-
-
-      // function displaySearch(isVideo, jsonTree) {
-      //   $("main-display").empty();
-      //   for(var i = 0; i < 0 /*amount of videos returned in JSON*/; i++) {
-      //     if(isVideo) {
-      //       var preview = $("<div>");
-      //       preview
-      //         .append($("<h1>").text(/*Title*/))
-      //         .append($("<div>").append(/*Thumbnail*/))
-      //         .data(jsonTree)
-      //         .on("click", function() {
-      //           displayMashup();
-      //         })
-      //       }
-      //     }
-      //   }
-      
-
-      // function displayMashup() {
-      //   //$(this).
-      // }
-      
-
-
-      // toQueryString: function() {
-      //    var queryString = '';
-      //    for (var i in this.queryParams) {
-      //      queryString += '&' + i + '=' + this.queryParams[i];
-      //    }
-      //    return this.baseUrl + '?' + queryString.trim('&');
-      //  }
    
       function displayItem(title, videoId, thubmnail){
         this.title = title;
@@ -239,11 +206,4 @@
             display(result, i);
           }
       }
-$(document).ready(function(){
-      $("#video1").on( "click", function()  {
-        event.preventDefault();
-        queryString.q = $("#search-input1").val().trim();
-        console.log(queryString.q);
-        ajaxCall();
-      });
-})
+}
