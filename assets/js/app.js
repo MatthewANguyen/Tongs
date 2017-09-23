@@ -21,6 +21,9 @@
         messagingSenderId: "483788713808"
       };
       firebase.initializeApp(config);
+
+      var database = firebase.database();
+
       var player;
 
       var queryString = {
@@ -78,7 +81,123 @@
       }
 
       //console.log('', toQueryString());
+      
+      // $("#search-input").on("click", function() {
+      //     console.log('', "hello");
+      // })
 
+      $.ajax({
+          url: toQueryString(),
+          method: "GET",
+          dataType: "json"
+      }).done(function(response) {
+          //response == json tree
+          //onYouTubeIframeAPIReady(response.id)
+          console.log(response);
+      });
+
+      /**
+       * [saveMashup writes the mashup information to firebase]
+       * @param  {[ajax response]}  json    [the ajax response which contains the JSON from YouTube API]
+       * @param  {Boolean} isVideo [if user searched by video, set to true]
+       * @return {[void]}          [description]
+       */
+      // function saveMashup(json, isVideo) {
+      //   if(isVideo) {
+      //     database.ref().push({
+      //       videoID: json.items[/*index*/].id.videoID,
+      //       audioID: /* Reference to audio ID*/,
+      //       upvotes: 0,
+      //       videoThumbnail: json.items[/*index*/].snippet.thumbnails.default.url,
+      //       title: json.items[/*index*/].snippet.title,
+      //       dateAdded: firebase.database.ServerValue.TIMESTAMP
+      //     });
+      //   } else {
+      //     database.ref().push({
+      //       videoID: /* Reference to video ID*/,
+      //       audioID: json.items[/*index*/].id.videoID,
+      //       upvotes: 0,
+      //       videoThumbnail: /* Reference to video thumbnail*/,
+      //       title: /* Reference to video title*/,
+      //       dateAdded: firebase.database.ServerValue.TIMESTAMP
+      //     });
+      //   }
+      // }
+
+      function findVideoByGoogleID() {
+
+      }
+
+      function findVideoByFirebaseID(id, cb_success, cb_err) {
+        return database.ref().child("videos/" + id).once('value').then(cb_success, cb_err);
+      }
+
+      function addVideo(object) {
+        console.log("add video");
+        return database.ref().child("videos").push(object).key;
+      }
+
+      
+
+      function findFirebase_success(res) {
+        console.log("RESPONSE", res);
+      }
+
+      function findFirebase_err(err) {
+        console.error("ERROR - Something went wrong fetching from Firebase", err);
+      }
+
+      $(document).ready(function() {
+
+        var trend = {
+          videoID: "matt",
+          audioID: "matt's voice",
+          upvotes: 10000000,
+          videoThumbnail: "picture",
+          title: "karioke"
+        };
+
+        $("#test").on('click', function() {
+        console.log("TEST BUTTON CLICKED");
+        findVideoByFirebaseID('-KuXauXkh6mlz7Ai4Mi9', findFirebase_success, findFirebase_err);
+      });
+        // var trendID = addVideo(trend);
+        // console.log(trendID);
+      })
+
+
+
+      // function displaySearch(isVideo, jsonTree) {
+      //   $("main-display").empty();
+      //   for(var i = 0; i < 0 /*amount of videos returned in JSON*/; i++) {
+      //     if(isVideo) {
+      //       var preview = $("<div>");
+      //       preview
+      //         .append($("<h1>").text(/*Title*/))
+      //         .append($("<div>").append(/*Thumbnail*/))
+      //         .data(jsonTree)
+      //         .on("click", function() {
+      //           displayMashup();
+      //         })
+      //       }
+      //     }
+      //   }
+      
+
+      // function displayMashup() {
+      //   //$(this).
+      // }
+      
+
+
+      // toQueryString: function() {
+      //    var queryString = '';
+      //    for (var i in this.queryParams) {
+      //      queryString += '&' + i + '=' + this.queryParams[i];
+      //    }
+      //    return this.baseUrl + '?' + queryString.trim('&');
+      //  }
+   
       function displayItem(title, videoId, thubmnail){
         this.title = title;
         this.audioId = "";
