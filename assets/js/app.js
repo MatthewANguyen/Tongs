@@ -297,7 +297,7 @@ function toQueryString() {
     for (var i in this.queryString) {
         qString += '&' + i + '=' + this.queryString[i];
     }
-    console.log(qString);
+    // console.log(qString);
     return baseUrl + "?" + qString.trim('&');
 }
 
@@ -308,7 +308,7 @@ $.ajax({
 }).done(function(response) {
     //response == json tree
     //onYouTubeIframeAPIReady(response.id)
-    console.log(response);
+    // console.log(response);
 });
 
 /**
@@ -348,7 +348,7 @@ function findVideoByFirebaseID(id, cb_success, cb_err) {
 }
 
 function addVideo(object) {
-    console.log("add video");
+    // console.log("add video");
     return database.ref().child("videos").push(object).key;
 }
 
@@ -357,13 +357,13 @@ function addVideo(object) {
  * @return {[String]} [the ID of the youtube video from google API]
  */
 function getRandomVideo() {
-    console.log("random video return");
+    // console.log("random video return");
     return database.ref().child("trending").limitToLast(10).once("value").then(function(snapshot) {
-        console.log(snapshot.val());
+        // console.log(snapshot.val());
         var trendingArray = Object.values(snapshot.val());
-        console.log(trendingArray, Math.floor((Math.random()) * 10));
+        // console.log(trendingArray, Math.floor((Math.random()) * 10));
         var randomEntry = trendingArray[Math.floor((Math.random()) * 10)]
-        console.log('run before', randomEntry);
+        // console.log('run before', randomEntry);
         return randomEntry.audioID;
     });
 }
@@ -379,7 +379,7 @@ function getRandomVideo() {
 $(document).ready(function() {
 
     var randomEntry = getRandomVideo().then(function(data) {
-        console.log('run after', data);
+        // console.log('run after', data);
     });
 
     $("#test").on('click', function() {});
@@ -400,6 +400,7 @@ function display(displayItem, num) {
     } //append the new div
     var displayDiv = $("<div></div>");
     displayDiv.addClass("resultCard");
+    $(".resultCard").attr("data-videoId", displayItem.videoId);
     var titleDiv = $("<h3>" + displayItem.title + "</h3>");
     titleDiv.addClass("titleDisplay");
     var imgDiv = $("<img src='" + displayItem.thubmnail + "'/>");
@@ -415,40 +416,42 @@ function ajaxCall() {
         method: "GET",
         dataType: "json"
     }).done(function(response) {
+      // console.log('queryString', toQueryString);
         displayResults(response);
     });
 }
 // CANNOT SEPERATE THESE FUNCTION BECAUSE THE "RESPONSE." CALLS ARE REFERENCING NOTHING. LINES 114 - 117
 function displayResults(response) {
-    console.log("start of for loop");
-    for (var i = 0; 0 < response.items.length; i++) {
+    // console.log("start of for loop");
+    for (var i = 0; i < response.items.length; i++) {
         var videoId = response.items[i].id.videoId;
         var title = response.items[i].snippet.title;
-        console.log("response.items.snippet", response.items[i].snippet.thumbnails)
+        // console.log("response.items.snippet", response.items[i].snippet.thumbnails)
         var thubmnail = response.items[i].snippet.thumbnails.default.url;
         var result = new displayItem(title, videoId, thubmnail);
-        console.log("about to display the " + i + " element");
+        // console.log("about to display the " + i + " element");
         display(result, i);
     }
 }
 
 
 $(document).ready(function() {
-            $("#video1").on("click", function() {
-                event.preventDefault();
-                queryString.q = $("#search-input1").val().trim();
-                console.log(queryString.q);
-                ajaxCall();
-            });
+    $("#video1").on("click", function() {
+        event.preventDefault();
+        queryString.q = $("#search-input1").val().trim();
+        // console.log(queryString.q);
+        ajaxCall();
+    });
 
 
-            // $(".resultCard").on("click", function() {
-            $("body").on("click", ".resultCard", function() {
-                event.preventDefault();
-                var videoId = $(this).attr("data-videoId");
-                $("#main-display").empty();
-                $("#main-display").append("<div id='player'></div>");
-                onYouTubeIframeAPIReady(videoId);
-            });
-        }
 
+    // $(".resultCard").on("click", function() {
+    $("body").on("click", ".resultCard", function() {
+        event.preventDefault();
+        var videoId = $(this).attr("data-videoId");
+        $("#main-display").empty();
+        $("#main-display").append("<div id='player'></div>");
+        onYouTubeIframeAPIReady(videoId);
+        // console.log('this is vid id', videoId);
+    });
+});
