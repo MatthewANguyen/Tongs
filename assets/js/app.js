@@ -229,5 +229,5 @@ $(document).ready(function() {
                 $("#main-display").append("<div id='player'></div>");
                 onYouTubeIframeAPIReady(videoId);
             });
-        }
+        });
 
