@@ -52,11 +52,6 @@ header {
 }
 
 img{
-	/*float:left;*/
-	display: inline-block;
-	margin-right:2%;
-	margin-bottom:2%;
-	width:20%;
 	border-radius: 5%;
 	padding:3px;
 	border: solid #ccc 1px;

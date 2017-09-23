@@ -88,7 +88,7 @@ $.ajax({
 }).done(function(response) {
     //response == json tree
     //onYouTubeIframeAPIReady(response.id)
-    // console.log(response);
+    console.log(response);  //francis uncommented this to see generated data
 });
 
 /**
@@ -176,17 +176,23 @@ function displayItem(title, videoId, thubmnail) {
 function display(displayItem, num) {
     if (num === 0) {
         $("#main-display").empty();
-    } //append the new div
-    var displayDiv = $("<div></div>");
-    displayDiv.addClass("resultCard");
-    $(".resultCard").attr("data-videoId", displayItem.videoId);
-    var titleDiv = $("<h3>" + displayItem.title + "</h3>");
-    titleDiv.addClass("titleDisplay");
-    var imgDiv = $("<img src='" + displayItem.thubmnail + "'/>");
-    displayDiv.append(imgDiv);
-    displayDiv.append(titleDiv);
-    $("#main-display")
-        .append(displayDiv);
+    }
+    //create container
+    var displayDiv = $("<div>").addClass("col-xs-12")
+                                .addClass("resultCard");
+    // Add image to container
+    $("<div>").addClass("col-xs-4")
+                .append("<img src='" + displayItem.thubmnail + "' style='width:100%; margin-bottom:2%' />")
+                // .css("width","100%")
+                .attr("data-videoId", displayItem.videoId)
+                .appendTo(displayDiv);
+    // Add title to container
+    $("<div>").addClass("col-xs-8")
+                .addClass("titleDisplay")
+                .append("<h3>" + displayItem.title + "</h3>")
+                .appendTo(displayDiv);
+    // add container to display
+    $("#main-display").append(displayDiv);
 }
 
 function ajaxCall() {
@@ -234,15 +240,20 @@ $(document).ready(function() {
         // console.log('this is vid id', videoId);
     });
 
- var likes = "";
+ var likes = 100;
     function addLikeButton(divId) {
 
     // console.log('Add Like to ', divId);
     $("<button>").html("Likes " + likes)
-            .addClass("btn btn-info")
-            .attr("type", "button")
-            .attr("id","like")
-            .appendTo(divId);
+                .addClass("btn btn-info")
+                .attr("type", "button")
+                .attr("id","like")
+                .attr("videoId",/* videoId*/)
+                .attr("audioId",/* audioId*/)
+                .attr("upvotes", /* upvotes*/)
+                .attr("videoThumbnail", /* thumbnail*/)
+                .attr("title", /* title*/)
+                .appendTo(divId);
   }
 
   function addDislikeButton(divId){
@@ -250,6 +261,11 @@ $(document).ready(function() {
                  .addClass("btn btn-info")
                  .attr("type", "button")
                  .attr("id","Dislike")
+                 .attr("videoId",/* videoId*/)
+                 .attr("audioId",/* audioId*/)
+                 .attr("upvotes", /* upvotes*/)
+                 .attr("videoThumbnail", /* thumbnail*/)
+                 .attr("title", /* title*/)
                  .appendTo(divId);
   }
 
