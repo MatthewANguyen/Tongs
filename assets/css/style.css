@@ -46,3 +46,21 @@ header {
 	text-align: center;
 	padding: : 0px 60px;
 }
+
+.tittleDisplay{
+	display: inline;
+
+
+img{
+	display:inline-block;
+	float:left;
+	margin-right:2%;
+	margin-bottom:2%;
+	width:20%;
+	padding:3px;
+	border: solid #ccc 1px;
+}
+img:hover {
+    background-color: blue;
+
+}
