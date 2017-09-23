@@ -233,4 +233,33 @@ $(document).ready(function() {
         onYouTubeIframeAPIReady(videoId);
         // console.log('this is vid id', videoId);
     });
+
+ var likes = "";
+    function addLikeButton(divId) {
+
+    // console.log('Add Like to ', divId);
+    $("<button>").html("Likes " + likes)
+            .addClass("btn btn-info")
+            .attr("type", "button")
+            .attr("id","like")
+            .appendTo(divId);
+  }
+
+  function addDislikeButton(divId){
+    $("<button>").html("Dislikes " + likes)
+                 .addClass("btn btn-info")
+                 .attr("type", "button")
+                 .attr("id","Dislike")
+                 .appendTo(divId);
+  }
+
+  // console.log('Document Loaded...FIRE \'D MISSILES!!!');
+ addLikeButton("#main-display");
+ addDislikeButton("#main-display");
+
+
+  $(".btn-info").on("click", function(){
+    console.log("Yep it working")          
+  })
 });
+
