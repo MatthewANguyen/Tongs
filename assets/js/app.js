@@ -223,16 +223,25 @@ function displayResults(response) {
 $(document).ready(function() {
     $("#video1").on("click", function() {
         event.preventDefault();
+
+        var search = $("#search-input1").val(); // Do nothing when input field contains nothing
+        if(search == ""){
+            return false;
+        };
+
         queryString.q = $("#search-input1").val().trim();
         // console.log(queryString.q);
         ajaxCall();
     });
 
-
+   
 
     // $(".resultCard").on("click", function() {
     $("body").on("click", ".resultCard", function() {
         event.preventDefault();
+
+       
+
         var videoId = $(this).attr("data-videoId");
         $("#main-display").empty();
         $("#main-display").append("<div id='player'></div>");
