@@ -35,34 +35,62 @@ var queryString = {
 
 }
 
-function onYouTubeIframeAPIReady(id) {
-    player = new YT.Player('player', {
+function onYouTubeIframeAPIReady(videoId) {
+    player = new YT.Player('videoPlayer', {
         height: '390',
         width: '640',
-        videoId: id,
+        videoId: videoId,
         playerVars: { 'controls': 0 },
         events: {
-            'onReady': onPlayerReady,
+            'onReady': mute,
             'onStateChange': onPlayerStateChange
         }
     });
 }
+
+function playAudio(audioId) {
+    console.log("hey we are in the playAudio function");
+    player = new YT.Player('audioPlayer', {
+        height: '0',
+        width: '0',
+        videoId: audioId,
+        playerVars: { 'controls': 0 },
+        events: {
+            'onReady': blind,
+            'onStateChange': onPlayerStateChange
+        }
+
+    });
+}
+
 // 4. The API will call this function when the video player is ready.
-function onPlayerReady(event) {
+function mute(event) {
+    //need to target correct video to mute, and other video to be hidden and play audio. 
     event.target.playVideo().mute();
+    //hide audio video
+    //play audio video sound. 
+}
+
+function blind(event) {
+    //need to target correct video to mute, and other video to be hidden and play audio. 
+    //event.target.playVideo().hide();
+    event.target.playVideo();
+    //hide audio video
+    //play audio video sound. 
 
 }
 
 // 5. The API calls this function when the player's state changes.
 //    The function indicates that when playing a video (state=1),
 //    the player should play for six seconds and then stop.
+
 var done = false;
 
 function onPlayerStateChange(event) {
-    if (event.data == YT.PlayerState.PLAYING && !done) {
-        setTimeout(stopVideo, 10000);
-        done = true;
-    }
+    // if (event.data == YT.PlayerState.PLAYING && !done) {
+    //     setTimeout(stopVideo, 10000);
+    //     //done = true;
+    // }
 }
 
 function stopVideo() {
@@ -194,43 +222,69 @@ function displayItem(title, videoId, thubmnail) {
     this.upvotes = 0;
 }
 
-function display(displayItem, num) {
+function display(displayItem, num, bool) {
     if (num === 0) {
         $("#main-display").empty();
-    } //append the new div
+    }
+
+    //append the new div
     var displayDiv = $("<div></div>");
     displayDiv.addClass("resultCard");
-    $(".resultCard").attr("data-videoId", displayItem.videoId);
-    var titleDiv = $("<h3>" + displayItem.title + "</h3>");
-    titleDiv.addClass("titleDisplay");
-    var imgDiv = $("<img src='" + displayItem.thubmnail + "'/>");
-    displayDiv.append(imgDiv);
-    displayDiv.append(titleDiv);
+    displayDiv.addClass("col-xs-4");
+
+    if (bool) {
+        $(displayDiv).attr("data-videoId", displayItem.videoId);
+        $(displayDiv).attr("data-audioId", "5OKdbc0DYpM"); //displayItem.audioId
+    } else {
+        $(displayDiv).attr("data-videoId", "3UUZgiQHlQU"); //displayItem.videoId
+        $(displayDiv).attr("data-audioId", displayItem.audioId);
+    }
+
+    // Add image to container
+    $("<div>").addClass("col-xs-4")
+        .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+        .addClass("grow")
+        // .css("width","100%")
+        .attr("data-videoId", displayItem.videoId)
+        .appendTo(displayDiv);
+    // Add title to container
+    $("<div>").addClass("col-xs-8")
+        .addClass("titleDisplay")
+        .append("<h3>" + displayItem.title + "</h3>")
+        .appendTo(displayDiv);
+
     $("#main-display")
         .append(displayDiv);
 }
 
-function ajaxCall() {
+function ajaxCall(bool) {
     $.ajax({
         url: toQueryString(),
         method: "GET",
         dataType: "json"
     }).done(function(response) {
-      // console.log('queryString', toQueryString);
-        displayResults(response);
+        // console.log('queryString', toQueryString);
+        displayResults(response, bool);
     });
 }
 // CANNOT SEPERATE THESE FUNCTION BECAUSE THE "RESPONSE." CALLS ARE REFERENCING NOTHING. LINES 114 - 117
-function displayResults(response) {
+function displayResults(response, bool) {
     // console.log("start of for loop");
     for (var i = 0; i < response.items.length; i++) {
         var videoId = response.items[i].id.videoId;
         var title = response.items[i].snippet.title;
         // console.log("response.items.snippet", response.items[i].snippet.thumbnails)
         var thubmnail = response.items[i].snippet.thumbnails.default.url;
+
         var result = new displayItem(title, videoId, thubmnail);
+        if (!bool) {
+            result.audioId = result.videoId;
+            result.videoId = "";
+            // set the titles
+        }
+
         // console.log("about to display the " + i + " element");
-        display(result, i);
+        display(result, i, bool);
     }
 }
 
@@ -240,18 +294,74 @@ $(document).ready(function() {
         event.preventDefault();
         queryString.q = $("#search-input1").val().trim();
         // console.log(queryString.q);
-        ajaxCall();
+        ajaxCall(true);
     });
 
+    $("#audio1").on("click", function() {
+        event.preventDefault();
+        queryString.q = $("#search-input1").val().trim();
+        // console.log(queryString.q);
+        ajaxCall(false); //pass through bool?
+    });
 
 
     // $(".resultCard").on("click", function() {
     $("body").on("click", ".resultCard", function() {
         event.preventDefault();
         var videoId = $(this).attr("data-videoId");
+        var audioId = $(this).attr("data-audioId");
         $("#main-display").empty();
-        $("#main-display").append("<div id='player'></div>");
+        $("#main-display").append("<div id='audioPlayer'></div>");
+        $("#main-display").append("<div id='videoPlayer'></div>");
+        addNumberInput($("#main-display"), 7);
+        addLikeButton($("#main-display"));
+        addDislikeButton($("#main-display"));
         onYouTubeIframeAPIReady(videoId);
+        console.log("the audioID is: " + audioId);
+        playAudio(audioId);
         // console.log('this is vid id', videoId);
     });
+
+
+    function addLikeButton(divId) {
+
+        // console.log('Add Like to ', divId);
+        $("<button>").html("Like ")
+            .attr("id", "upVoteBtn")
+            .addClass("btn btn-info")
+            .attr("type", "button")
+            .appendTo(divId)
+            .on("click", function() {
+                console.log("liked");
+                //firebcse update prop in real time when ready. 
+            });
+    }
+
+    function addDislikeButton(divId) {
+        $("<button>").html("Dislike ")
+            .attr("id", "downVoteBtn")
+            .addClass("btn btn-info")
+            .attr("type", "button")
+            .appendTo(divId)
+            .on("click", function() {
+                console.log("disliked");
+                //firebcse update prop in real time when ready. 
+            });
+    }
+
+ function addNumberInput(divId, likes) {
+        $("<div>").html(likes)
+            .attr("type", "text")
+            .attr("id", "likesDisplay")
+            .appendTo(divId)
+}
+
+    // console.log('Document Loaded...FIRE \'D MISSILES!!!');
+    addLikeButton($("#main-display"));
+    addDislikeButton($("#main-display"));
+
+
+    $(".btn-info").on("click", function() {
+        console.log("Yep it working")
+    })
 });
