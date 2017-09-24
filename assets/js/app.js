@@ -221,19 +221,12 @@ function display(displayItem, num, bool) {
 
     // Add image to container
     $("<div>").addClass("col-xs-4")
-<<<<<<< HEAD
-                .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
-                .addClass("grow")
-                .css("width","100%")
-                .attr("data-videoId", displayItem.videoId)
-                .appendTo(displayDiv);
-=======
         .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
         .addClass("grow")
         // .css("width","100%")
         .attr("data-videoId", displayItem.videoId)
         .appendTo(displayDiv);
->>>>>>> 1b67182a45c187a8b927c90da68324aa8f36bb42
+
     // Add title to container
     $("<div>").addClass("col-xs-8")
         .addClass("titleDisplay")
