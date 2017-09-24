@@ -1,13 +1,21 @@
 html {
 	height: 100%;
+	
+}
+body{
+/*	background-color: blue;*/
+/* background-image:url(./assets/images/background.jpg) not working*/
 }
 
 header {
-	font-size: 60px;
+	font-size: 400%;
 	text-align: center;
 	font-family: 'Yantramanav', sans-serif;
 	font-weight: 100;
 	margin: 20px 0;
+}
+p{
+	font-size: 40%;
 }
 
 .home {
