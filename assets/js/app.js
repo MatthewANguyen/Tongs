@@ -65,18 +65,18 @@ function playAudio(audioId) {
 
 // 4. The API will call this function when the video player is ready.
 function mute(event) {
-    //need to target correct video to mute, and other video to be hidden and play audio. 
+    //need to target correct video to mute, and other video to be hidden and play audio.
     event.target.playVideo().mute();
     //hide audio video
-    //play audio video sound. 
+    //play audio video sound.
 }
 
 function blind(event) {
-    //need to target correct video to mute, and other video to be hidden and play audio. 
+    //need to target correct video to mute, and other video to be hidden and play audio.
     //event.target.playVideo().hide();
     event.target.playVideo();
     //hide audio video
-    //play audio video sound. 
+    //play audio video sound.
 
 }
 
@@ -335,7 +335,7 @@ $(document).ready(function() {
             .appendTo(divId)
             .on("click", function() {
                 console.log("liked");
-                //firebcse update prop in real time when ready. 
+                //firebcse update prop in real time when ready.
             });
     }
 
@@ -347,7 +347,7 @@ $(document).ready(function() {
             .appendTo(divId)
             .on("click", function() {
                 console.log("disliked");
-                //firebcse update prop in real time when ready. 
+                //firebcse update prop in real time when ready.
             });
     }
 
