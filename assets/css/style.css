@@ -53,10 +53,31 @@ header {
 
 img{
 	border-radius: 5%;
-	padding:3px;
+	padding:5px;
 	border: solid #ccc 1px;
 }
 img:hover {
     background-color: blue;
+    cursor:pointer;
 
 }
+/*.grow img{
+	width:300px;
+	height:300px;
+}*/
+.grow img {
+  height: 100%;
+  width: 100%;
+
+  -webkit-transition: all 1s ease;
+     -moz-transition: all 1s ease;
+       -o-transition: all 1s ease;
+      -ms-transition: all 1s ease;
+          transition: all 1s ease;
+}
+
+.grow img:hover {
+  width: 110%;
+  height: 110%;
+}
+

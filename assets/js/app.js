@@ -182,7 +182,8 @@ function display(displayItem, num) {
                                 .addClass("resultCard");
     // Add image to container
     $("<div>").addClass("col-xs-4")
-                .append("<img src='" + displayItem.thubmnail + "' style='width:100%; margin-bottom:2%' />")
+                .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+                .addClass("grow")
                 // .css("width","100%")
                 .attr("data-videoId", displayItem.videoId)
                 .appendTo(displayDiv);
