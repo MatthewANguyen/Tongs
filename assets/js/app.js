@@ -65,18 +65,18 @@ function playAudio(audioId) {
 
 // 4. The API will call this function when the video player is ready.
 function mute(event) {
-    //need to target correct video to mute, and other video to be hidden and play audio. 
+    //need to target correct video to mute, and other video to be hidden and play audio.
     event.target.playVideo().mute();
     //hide audio video
-    //play audio video sound. 
+    //play audio video sound.
 }
 
 function blind(event) {
-    //need to target correct video to mute, and other video to be hidden and play audio. 
+    //need to target correct video to mute, and other video to be hidden and play audio.
     //event.target.playVideo().hide();
     event.target.playVideo();
     //hide audio video
-    //play audio video sound. 
+    //play audio video sound.
 
 }
 
@@ -193,12 +193,13 @@ $(document).ready(function() {
     $("#test").on('click', function() {});
 })
 
-function displayItem(title, videoId, thubmnail) {
-    this.title = title;
+function displayItem(videoTitle, videoId, thubmnail) {
+    this.audioTitle = "";
+    this.videoTitle = videoTitle;
     this.audioId = "";
     this.videoId = videoId;
     this.thubmnail = thubmnail;
-    this.upvotes = 0;
+    this.likes = 0;
 }
 
 function display(displayItem, num, bool) {
@@ -219,6 +220,7 @@ function display(displayItem, num, bool) {
         $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
 
+    if(bool){
     // Add image to container
     $("<div>").addClass("col-xs-4")
         .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
@@ -230,11 +232,29 @@ function display(displayItem, num, bool) {
     // Add title to container
     $("<div>").addClass("col-xs-8")
         .addClass("titleDisplay")
-        .append("<h3>" + displayItem.title + "</h3>")
+        .append("<h3>" + displayItem.videoTitle + "</h3>")
         .appendTo(displayDiv);
 
     $("#main-display")
         .append(displayDiv);
+    }else{
+
+    // Add image to container
+    $("<div>").addClass("col-xs-4")
+        .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+        .addClass("grow")
+        // .css("width","100%")
+        .attr("data-videoId", displayItem.videoId)
+        .appendTo(displayDiv);
+    // Add title to container
+    $("<div>").addClass("col-xs-8")
+        .addClass("titleDisplay")
+        .append("<h3>" + displayItem.audioTitle + "</h3>")
+        .appendTo(displayDiv);
+
+    $("#main-display")
+        .append(displayDiv);
+    }
 }
 
 function ajaxCall(bool) {
@@ -257,10 +277,13 @@ function displayResults(response, bool) {
         var thubmnail = response.items[i].snippet.thumbnails.default.url;
 
         var result = new displayItem(title, videoId, thubmnail);
+
         if (!bool) {
             result.audioId = result.videoId;
             result.videoId = "";
-            // set the titles
+            result.audioTitle = title;
+            result.videoTitle = "";
+            //likes
         }
 
         // console.log("about to display the " + i + " element");
@@ -313,7 +336,7 @@ $(document).ready(function() {
             .appendTo(divId)
             .on("click", function() {
                 console.log("liked");
-                //firebcse update prop in real time when ready. 
+                //firebcse update prop in real time when ready.
             });
     }
 
@@ -325,7 +348,7 @@ $(document).ready(function() {
             .appendTo(divId)
             .on("click", function() {
                 console.log("disliked");
-                //firebcse update prop in real time when ready. 
+                //firebcse update prop in real time when ready.
             });
     }
 
