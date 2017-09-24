@@ -8,14 +8,19 @@ body{
 }
 
 header {
-	font-size: 400%;
+	font-size: 200%;
 	text-align: center;
 	font-family: 'Yantramanav', sans-serif;
 	font-weight: 100;
 	margin: 20px 0;
 
 }
+h1{
+	font-size: 200%
+}
+
 #purpose p {
+	/*font-size: 100%;*/
     text-align: center;
     animation: fadein 2s;
     -moz-animation: fadein 2s; /* Firefox */

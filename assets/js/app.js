@@ -220,7 +220,7 @@ function display(displayItem, num, bool) {
     $("<div>").addClass("col-xs-4")
                 .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
                 .addClass("grow")
-                // .css("width","100%")
+                .css("width","100%")
                 .attr("data-videoId", displayItem.videoId)
                 .appendTo(displayDiv);
     // Add title to container
