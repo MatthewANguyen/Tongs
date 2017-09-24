@@ -97,30 +97,41 @@ $.ajax({
  * @param  {Boolean} isVideo [if user searched by video, set to true]
  * @return {[void]}          [description]
  */
-// function saveMashup(json, isVideo) {
-//   if(isVideo) {
-//     database.ref().push({
-//       videoID: json.items[/*index*/].id.videoID,
-//       audioID: /* Reference to audio ID*/,
-//       upvotes: 0,
-//       videoThumbnail: json.items[/*index*/].snippet.thumbnails.default.url,
-//       title: json.items[/*index*/].snippet.title,
-//       dateAdded: firebase.database.ServerValue.TIMESTAMP
-//     });
-//   } else {
-//     database.ref().push({
-//       videoID: /* Reference to video ID*/,
-//       audioID: json.items[/*index*/].id.videoID,
-//       upvotes: 0,
-//       videoThumbnail: /* Reference to video thumbnail*/,
-//       title: /* Reference to video title*/,
-//       dateAdded: firebase.database.ServerValue.TIMESTAMP
-//     });
-//   }
-// }
+function saveMashup(button) {
+  database.ref().child("trending").push({
+    videoID: button.attr("videoId"),
+    audioID: button.attr("audioId"),
+    upvotes: 1,
+    videoThumbnail: button.attr("videoThumbnail"),
+    title: button.attr("title"),
+    dateAdded: firebase.database.ServerValue.TIMESTAMP
+  });
+}
 
-function findVideoByGoogleID() {
-
+function upvoteMashup(activeVideoID, button) {
+  console.log("running");
+  var isMatch = false;
+  var matchIndex;
+  database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).on("value", function(snapshot){
+    var currentSnapshot = snapshot.val();
+    console.log(currentSnapshot);
+    var theKey;
+    var currentUpvotes;
+    for (var key in currentSnapshot) {
+      console.log("key is:  " + key);
+      console.log("upvotes is: " + currentSnapshot[key].upvotes);
+      theKey = key; 
+      currentUpvotes = currentSnapshot[key].upvotes;
+      currentUpvotes++;
+    }
+    var updates = {};
+    //updates["/trending/" + key] 
+    console.log(theKey);
+    updates = {upvotes: currentUpvotes};
+    database.ref("/trending/"+theKey).update(updates);
+  });
+  // saveMashup(button);
+  // console.log("no match"); 
 }
 
 function findVideoByFirebaseID(id, cb_success, cb_err) {
@@ -162,7 +173,17 @@ $(document).ready(function() {
         // console.log('run after', data);
     });
 
-    $("#test").on('click', function() {});
+    upvoteMashup("matt3");
+
+    $("#test").on('click', function() {
+      // database.ref().child("trending").push({
+      //   videoID: "test",
+      //   audioID: "test",
+      //   upvotes: 0,
+      //   videoThumbnail: "test",
+      //   title: "test",
+      // })
+    });
 })
 
 function displayItem(title, videoId, thubmnail) {
