@@ -210,7 +210,7 @@ function display(displayItem, num, bool) {
     //append the new div
     var displayDiv = $("<div></div>");
     displayDiv.addClass("resultCard");
-    displayDiv.addClass("col-xs-4");
+    displayDiv.addClass("col-xs-12");
 
     if (bool) {
         $(displayDiv).attr("data-videoId", displayItem.videoId);
