@@ -116,8 +116,8 @@ img:hover {
 	height:300px;
 }*/
 .grow img {
-  height: 200%;
-  width: 200%;
+  height: 100%;
+  width: 100%;
 
   -webkit-transition: all 1s ease;
      -moz-transition: all 1s ease;
