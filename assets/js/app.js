@@ -140,6 +140,7 @@ function saveMashup(button) {
 //Still need to test when there are different mashups with the same videoID
 function upvoteMashup(activeVideoID, activeAudioID, button) {
   console.log("running");
+  console.log(activeVideoID);
   database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot){
     var currentSnapshot = snapshot.val();
     console.log(currentSnapshot);
@@ -231,29 +232,14 @@ function getRandomVideo() {
 
 $(document).ready(function() {
 
-    // var randomEntry = getRandomVideo().then(function(data) {
-    //     // console.log('run after', data);
-    // });
-    console.log(getRandomVideo());
-    upvoteMashup("matt1");
-
-    // $("#test").on('click', function() {
-    //   // database.ref().child("trending").push({
-    //   //   videoID: "test",
-    //   //   audioID: "test",
-    //   //   upvotes: 0,
-    //   //   videoThumbnail: "test",
-    //   //   title: "test",
-    //   // })
-    // });
 })
 
-function displayItem(videoTitle, videoId, thubmnail) {
+function displayItem(videoTitle, videoId, thumbnail) {
     this.audioTitle = "";
     this.videoTitle = videoTitle;
     this.audioId = "";
     this.videoId = videoId;
-    this.thubmnail = thubmnail;
+    this.thumbnail = thumbnail;
     this.likes = 0;
 }
 
@@ -280,7 +266,7 @@ function display(displayItem, num, bool) {
     if (bool) {
         // Add image to container
         $("<div>").addClass("col-xs-4")
-            .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+            .append("<img src='" + displayItem.thumbnail + "' style='margin-bottom:2%' />")
             .addClass("grow")
             // .css("width","100%")
             .attr("data-videoId", displayItem.videoId)
@@ -298,7 +284,7 @@ function display(displayItem, num, bool) {
 
         // Add image to container
         $("<div>").addClass("col-xs-4")
-            .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+            .append("<img src='" + displayItem.thumbnail + "' style='margin-bottom:2%' />")
             .addClass("grow")
             // .css("width","100%")
             .attr("data-videoId", displayItem.videoId)
@@ -331,9 +317,9 @@ function displayResults(response, bool) {
         var videoId = response.items[i].id.videoId;
         var title = response.items[i].snippet.title;
         // console.log("response.items.snippet", response.items[i].snippet.thumbnails)
-        var thubmnail = response.items[i].snippet.thumbnails.default.url;
+        var thumbnail = response.items[i].snippet.thumbnails.default.url;
 
-        var result = new displayItem(title, videoId, thubmnail);
+        var result = new displayItem(title, videoId, thumbnail);
 
         if (!bool) {
             result.audioId = result.videoId;
@@ -378,7 +364,7 @@ $(document).ready(function() {
         $("#main-display").append("<div id='videoPlayer'></div>");
         addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
         addLikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
-        addDislikeButton($("#main-display"));
+        addDislikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
         onYouTubeIframeAPIReady(videoId);
         console.log("the audioID is: " + audioId);
         playAudio(audioId);
