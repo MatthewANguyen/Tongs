@@ -1,17 +1,4 @@
-// 2. This code loads the IFrame Player API code asynchronously.
 
-// var tag = document.createElement('script');
-
-// tag.src = "https://www.youtube.com/iframe_api";
-// var firstScriptTag = document.getElementsByTagName('script')[0];
-// firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-// <script src="https://www.youtube.com/iframe_api"></script>
-
-// 3. This function creates an <iframe> (and YouTube player)
-//    after the API code downloads.
-
-
-// Initialize Firebase
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyC2HA7n0Xg2eXr8chPxyWFGr8dgNM6UWbY",
@@ -42,8 +29,7 @@ function onYouTubeIframeAPIReady(videoId) {
         videoId: videoId,
         playerVars: { 'controls': 0 },
         events: {
-            'onReady': mute,
-            'onStateChange': onPlayerStateChange
+            'onReady': mute
         }
     });
 }
@@ -56,48 +42,23 @@ function playAudio(audioId) {
         videoId: audioId,
         playerVars: { 'controls': 0 },
         events: {
-            'onReady': blind,
-            'onStateChange': onPlayerStateChange
+            'onReady': blind
         }
 
     });
 }
 
-// 4. The API will call this function when the video player is ready.
 function mute(event) {
-    //need to target correct video to mute, and other video to be hidden and play audio.
     event.target.playVideo().mute();
-    //hide audio video
-    //play audio video sound.
 }
 
 function blind(event) {
-    //need to target correct video to mute, and other video to be hidden and play audio.
-    //event.target.playVideo().hide();
     event.target.playVideo();
-    //hide audio video
-    //play audio video sound.
-
-}
-
-// 5. The API calls this function when the player's state changes.
-//    The function indicates that when playing a video (state=1),
-//    the player should play for six seconds and then stop.
-
-var done = false;
-
-function onPlayerStateChange(event) {
-    // if (event.data == YT.PlayerState.PLAYING && !done) {
-    //     setTimeout(stopVideo, 10000);
-    //     //done = true;
-    // }
 }
 
 function stopVideo() {
     player.stopVideo();
 }
-
-
 
 function toQueryString() {
     var baseUrl = "https://www.googleapis.com/youtube/v3/search"
@@ -105,10 +66,8 @@ function toQueryString() {
     for (var i in this.queryString) {
         qString += '&' + i + '=' + this.queryString[i];
     }
-    // console.log(qString);
     return baseUrl + "?" + qString.trim('&');
 }
-
 
 /**
  * [saveMashup writes the mashup information to firebase]
@@ -124,16 +83,13 @@ function saveMashup(button) {
         thumbnail: button.data("thumbnail"),
         videoTitle: button.data("videoTitle"),
         audioTitle: button.data("audioTitle"),
-        dateAdded: firebase.database.ServerValue.TIMESTAMP
     });
 }
 
-//Still need to test when there are different mashups with the same videoID
 function upvoteMashup(activeVideoID, activeAudioID, button) {
     console.log("running");
-    database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot) {
+    database.ref().child("trending").orderByChild('videoId').equalTo(activeVideoID).once("value").then(function(snapshot) {
         var currentSnapshot = snapshot.val();
-        console.log(currentSnapshot);
         var theKey = "";
         var theVideoID;
         var theAudioID;
@@ -141,7 +97,9 @@ function upvoteMashup(activeVideoID, activeAudioID, button) {
         var theThumbnail;
         var currentUpvotes;
         for (var key in currentSnapshot) {
-            if (currentSnapshot[key].audioID == activeAudioID) {
+            console.log(currentSnapshot[key].audioID);
+            console.log(activeAudioID);
+            if (currentSnapshot[key].audioId == activeAudioID) {
                 theKey = key;
                 currentUpvotes = currentSnapshot[key].upvotes;
                 currentUpvotes++;
@@ -151,6 +109,7 @@ function upvoteMashup(activeVideoID, activeAudioID, button) {
             }
         }
         if (!theKey) {
+            console.log("audio doesn't match");
             saveMashup(button);
         }
     }, function(errorObject) {
@@ -162,7 +121,7 @@ function upvoteMashup(activeVideoID, activeAudioID, button) {
 
 function downvoteMashup(activeVideoID, activeAudioID, button) {
     console.log("running");
-    database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot) {
+    database.ref().child("trending").orderByChild('videoId').equalTo(activeVideoID).once("value").then(function(snapshot) {
         var currentSnapshot = snapshot.val();
         console.log(currentSnapshot);
         var theKey = "";
@@ -172,7 +131,7 @@ function downvoteMashup(activeVideoID, activeAudioID, button) {
         var theThumbnail;
         var currentUpvotes;
         for (var key in currentSnapshot) {
-            if (currentSnapshot[key].audioID == activeAudioID) {
+            if (currentSnapshot[key].audioId == activeAudioID) {
                 theKey = key;
                 currentUpvotes = currentSnapshot[key].upvotes;
                 currentUpvotes--;
@@ -187,19 +146,6 @@ function downvoteMashup(activeVideoID, activeAudioID, button) {
     });
 }
 
-function findVideoByFirebaseID(id, cb_success, cb_err) {
-    return database.ref().child("videos/" + id).once('value').then(cb_success, cb_err);
-}
-
-function addVideo(object) {
-    // console.log("add video");
-    return database.ref().child("videos").push(object).key;
-}
-
-/**
- * [getRandomVideo use this method to return a random video after a search]
- * @return {[String]} [the ID of the youtube video from google API]
- */
 function getRandomVideo() {
     // console.log("random video return");
     return database.ref().child("trending").limitToLast(10).once("value").then(function(snapshot) {
@@ -211,18 +157,6 @@ function getRandomVideo() {
         return randomEntry.audioID;
     });
 }
-
-// function findFirebase_success(res) {
-//   console.log("RESPONSE", res);
-// }
-
-// function findFirebase_err(err) {
-//   console.error("ERROR - Something went wrong fetching from Firebase", err);
-// }
-
-$(document).ready(function() {
-
-})
 
 function displayItem(videoTitle, videoId, thumbnail) {
     this.audioTitle = "";
@@ -237,8 +171,6 @@ function display(displayItem, num, isVideo) {
     if (num === 0) {
         $("#main-display").empty();
     }
-
-    //append the new div
     var displayDiv = $("<div></div>");
     displayDiv.addClass("resultCard");
     displayDiv.addClass("col-xs-12");
@@ -252,22 +184,18 @@ function display(displayItem, num, isVideo) {
         $(displayDiv).attr("data-videoId", "3UUZgiQHlQU"); //getRandomVideo();
         $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
-
     if (isVideo) {
         // Add image to container
         $("<div>").addClass("col-xs-4")
             .append("<img src='" + displayItem.thumbnail + "' style='margin-bottom:2%' />")
             .addClass("grow")
-            // .css("width","100%")
             .attr("data-videoId", displayItem.videoId)
             .appendTo(displayDiv);
-
         // Add title to container
         $("<div>").addClass("col-xs-8")
             .addClass("titleDisplay")
             .append("<h3>" + displayItem.videoTitle + "</h3>")
             .appendTo(displayDiv);
-
         $("#main-display")
             .append(displayDiv);
     } else {
@@ -276,7 +204,6 @@ function display(displayItem, num, isVideo) {
         $("<div>").addClass("col-xs-4")
             .append("<img src='" + displayItem.thumbnail + "' style='margin-bottom:2%' />")
             .addClass("grow")
-            // .css("width","100%")
             .attr("data-videoId", displayItem.videoId)
             .appendTo(displayDiv);
         // Add title to container
@@ -284,7 +211,6 @@ function display(displayItem, num, isVideo) {
             .addClass("titleDisplay")
             .append("<h3>" + displayItem.audioTitle + "</h3>")
             .appendTo(displayDiv);
-
         $("#main-display")
             .append(displayDiv);
     }
@@ -296,30 +222,22 @@ function ajaxCall(isVideo) {
         method: "GET",
         dataType: "json"
     }).done(function(response) {
-        // console.log('queryString', toQueryString);
         displayResults(response, isVideo);
     });
 }
-// CANNOT SEPERATE THESE FUNCTION BECAUSE THE "RESPONSE." CALLS ARE REFERENCING NOTHING. LINES 114 - 117
+
 function displayResults(response, isVideo) {
-    // console.log("start of for loop");
     for (var i = 0; i < response.items.length; i++) {
         var videoId = response.items[i].id.videoId;
         var title = response.items[i].snippet.title;
-        // console.log("response.items.snippet", response.items[i].snippet.thumbnails)
         var thumbnail = response.items[i].snippet.thumbnails.default.url;
-
         var result = new displayItem(title, videoId, thumbnail);
-
         if (!isVideo) {
             result.audioId = result.videoId;
             result.videoId = "";
             result.audioTitle = title;
             result.videoTitle = "";
-            //likes
         }
-
-        // console.log("about to display the " + i + " element");
         display(result, i, isVideo);
     }
 }
@@ -329,30 +247,23 @@ function loadFromAjax(isVideo) {
     ajaxCall(isVideo);
 }
 
-
 $(document).ready(function() {
     $("#video1").on("click", function() {
         event.preventDefault();
-
         var emptyInput = $("#search-input1").val();
         if (emptyInput == "") {
             console.log("What the heck")
             return;
         }
-        queryString.q = $("#search-input1").val().trim();
         loadFromAjax(true);
     });
-
     $("#audio1").on("click", function() {
         event.preventDefault();
-
         var emptyInput = $("#search-input1").val();
         if (emptyInput == "") {
             console.log("What the heck")
             return;
         }
-
-        queryString.q = $("#search-input1").val().trim();
         loadFromAjax(false);
     });
 
@@ -364,7 +275,6 @@ $(document).ready(function() {
         var thumbnail = $(this).attr("data-thumbnail");
         var videoTitle = $(this).attr("data-videoTitle");
         var audioTitle = $(this).attr("data-audioTitle");
-
         $("#main-display").empty();
         $("#side-search-bar").empty();
         $("#side-search-bar").append(
@@ -387,15 +297,6 @@ $(document).ready(function() {
                     }))
             )
         );
-        // <div class="col-md-2">
-        //         <div class="input-group home-small">
-        //             <div class="input-group search">
-        //                 <input type="text" id="search-input" class="form-control-small" placeholder="Search for...">
-        //             </div>
-        //             <button type="button" id="video" class="btn-nav btn-primary btn-sm">Video</button>
-        //             <button type="button" id="song" class="btn-nav btn-secondary btn-sm">Audio</button>
-        //         </div>
-        //     </div>
         $("#main-display").append("<div id='audioPlayer'></div>");
         $("#main-display").append("<div id='videoPlayer'></div>");
         addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
@@ -404,13 +305,9 @@ $(document).ready(function() {
         onYouTubeIframeAPIReady(videoId);
         console.log("the audioID is: " + audioId);
         playAudio(audioId);
-        // console.log('this is vid id', videoId);
     });
 
-
     function addLikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
-
-        // console.log('Add Like to ', divId);
         $("<button>").html("Like ")
             .attr("id", "upVoteBtn")
             .addClass("btn btn-primary")
@@ -424,7 +321,6 @@ $(document).ready(function() {
             .on("click", function() {
                 console.log("liked");
                 upvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this)); //firebcse update prop in real time when ready.
-
             });
     }
 
@@ -452,11 +348,6 @@ $(document).ready(function() {
             .attr("id", "likesDisplay")
             .appendTo(divId)
     }
-
-    // console.log('Document Loaded...FIRE \'D MISSILES!!!');
-    // addLikeButton($("#main-display"));
-    // addDislikeButton($("#main-display"));
-
 
     $(".btn-info").on("click", function() {
         console.log("Yep it working")
