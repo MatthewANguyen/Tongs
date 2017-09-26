@@ -125,30 +125,75 @@ $.ajax({
  * @param  {Boolean} isVideo [if user searched by video, set to true]
  * @return {[void]}          [description]
  */
-// function saveMashup(json, isVideo) {
-//   if(isVideo) {
-//     database.ref().push({
-//       videoID: json.items[/*index*/].id.videoID,
-//       audioID: /* Reference to audio ID*/,
-//       upvotes: 0,
-//       videoThumbnail: json.items[/*index*/].snippet.thumbnails.default.url,
-//       title: json.items[/*index*/].snippet.title,
-//       dateAdded: firebase.database.ServerValue.TIMESTAMP
-//     });
-//   } else {
-//     database.ref().push({
-//       videoID: /* Reference to video ID*/,
-//       audioID: json.items[/*index*/].id.videoID,
-//       upvotes: 0,
-//       videoThumbnail: /* Reference to video thumbnail*/,
-//       title: /* Reference to video title*/,
-//       dateAdded: firebase.database.ServerValue.TIMESTAMP
-//     });
-//   }
-// }
+function saveMashup(button) {
+  database.ref().child("trending").push({
+    videoID: button.data("videoId"),
+    audioID: button.data("audioId"),
+    upvotes: 1,
+    thumbnail: button.data("thumbnail"),
+    videoTitle: button.data("videoTitle"),
+    audioTitle: button.data("audioTitle"),
+    dateAdded: firebase.database.ServerValue.TIMESTAMP
+  });
+}
 
-function findVideoByGoogleID() {
+//Still need to test when there are different mashups with the same videoID
+function upvoteMashup(activeVideoID, activeAudioID, button) {
+  console.log("running");
+  database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot){
+    var currentSnapshot = snapshot.val();
+    console.log(currentSnapshot);
+    var theKey = "";
+    var theVideoID;
+    var theAudioID;
+    var theTitle;
+    var theThumbnail;
+    var currentUpvotes;
+    for (var key in currentSnapshot) {
+      if(currentSnapshot[key].audioID == activeAudioID) {
+        theKey = key; 
+        currentUpvotes = currentSnapshot[key].upvotes;
+        currentUpvotes++;
+        database.ref("/trending/"+theKey+"/upvotes").set(currentUpvotes);
+        console.log("key is:  " + key);
+        console.log("upvotes is: " + currentSnapshot[key].upvotes);
+      }
+    }
+    if(!theKey) {
+      saveMashup(button);
+    }
+  }, function(errorObject) {
+    console.log("Failed" + errorObject.code);
+    console.log("no match"); 
+    saveMashup(button);
+  });
+}
 
+function downvoteMashup(activeVideoID, activeAudioID, button) {
+  console.log("running");
+  database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot){
+    var currentSnapshot = snapshot.val();
+    console.log(currentSnapshot);
+    var theKey = "";
+    var theVideoID;
+    var theAudioID;
+    var theTitle;
+    var theThumbnail;
+    var currentUpvotes;
+    for (var key in currentSnapshot) {
+      if(currentSnapshot[key].audioID == activeAudioID) {
+        theKey = key; 
+        currentUpvotes = currentSnapshot[key].upvotes;
+        currentUpvotes--;
+        database.ref("/trending/"+theKey+"/upvotes").set(currentUpvotes);
+        console.log("key is:  " + key);
+        console.log("upvotes is: " + currentSnapshot[key].upvotes);
+      }
+    }
+  }, function(errorObject) {
+    console.log("Failed" + errorObject.code);
+    console.log("no match"); 
+  });
 }
 
 function findVideoByFirebaseID(id, cb_success, cb_err) {
@@ -186,11 +231,21 @@ function getRandomVideo() {
 
 $(document).ready(function() {
 
-    var randomEntry = getRandomVideo().then(function(data) {
-        // console.log('run after', data);
-    });
+    // var randomEntry = getRandomVideo().then(function(data) {
+    //     // console.log('run after', data);
+    // });
+    console.log(getRandomVideo());
+    upvoteMashup("matt1");
 
-    $("#test").on('click', function() {});
+    // $("#test").on('click', function() {
+    //   // database.ref().child("trending").push({
+    //   //   videoID: "test",
+    //   //   audioID: "test",
+    //   //   upvotes: 0,
+    //   //   videoThumbnail: "test",
+    //   //   title: "test",
+    //   // })
+    // });
 })
 
 function displayItem(videoTitle, videoId, thubmnail) {
@@ -211,49 +266,51 @@ function display(displayItem, num, bool) {
     var displayDiv = $("<div></div>");
     displayDiv.addClass("resultCard");
     displayDiv.addClass("col-xs-12");
-
+    displayDiv.attr("data-thumbnail", displayItem.thumbnail);
+    displayDiv.attr("data-audioTitle", displayItem.audioTitle);
+    displayDiv.attr("data-videoTitle", displayItem.videoTitle);
     if (bool) {
         $(displayDiv).attr("data-videoId", displayItem.videoId);
-        $(displayDiv).attr("data-audioId", "5OKdbc0DYpM"); //displayItem.audioId
+        $(displayDiv).attr("data-audioId", "5OKdbc0DYpM"); //getRandomVideo();
     } else {
-        $(displayDiv).attr("data-videoId", "3UUZgiQHlQU"); //displayItem.videoId
+        $(displayDiv).attr("data-videoId", "3UUZgiQHlQU"); //getRandomVideo();
         $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
 
-    if(bool){
-    // Add image to container
-    $("<div>").addClass("col-xs-4")
-        .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
-        .addClass("grow")
-        // .css("width","100%")
-        .attr("data-videoId", displayItem.videoId)
-        .appendTo(displayDiv);
+    if (bool) {
+        // Add image to container
+        $("<div>").addClass("col-xs-4")
+            .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+            .addClass("grow")
+            // .css("width","100%")
+            .attr("data-videoId", displayItem.videoId)
+            .appendTo(displayDiv);
 
-    // Add title to container
-    $("<div>").addClass("col-xs-8")
-        .addClass("titleDisplay")
-        .append("<h3>" + displayItem.videoTitle + "</h3>")
-        .appendTo(displayDiv);
+        // Add title to container
+        $("<div>").addClass("col-xs-8")
+            .addClass("titleDisplay")
+            .append("<h3>" + displayItem.videoTitle + "</h3>")
+            .appendTo(displayDiv);
 
-    $("#main-display")
-        .append(displayDiv);
-    }else{
+        $("#main-display")
+            .append(displayDiv);
+    } else {
 
-    // Add image to container
-    $("<div>").addClass("col-xs-4")
-        .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
-        .addClass("grow")
-        // .css("width","100%")
-        .attr("data-videoId", displayItem.videoId)
-        .appendTo(displayDiv);
-    // Add title to container
-    $("<div>").addClass("col-xs-8")
-        .addClass("titleDisplay")
-        .append("<h3>" + displayItem.audioTitle + "</h3>")
-        .appendTo(displayDiv);
+        // Add image to container
+        $("<div>").addClass("col-xs-4")
+            .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+            .addClass("grow")
+            // .css("width","100%")
+            .attr("data-videoId", displayItem.videoId)
+            .appendTo(displayDiv);
+        // Add title to container
+        $("<div>").addClass("col-xs-8")
+            .addClass("titleDisplay")
+            .append("<h3>" + displayItem.audioTitle + "</h3>")
+            .appendTo(displayDiv);
 
-    $("#main-display")
-        .append(displayDiv);
+        $("#main-display")
+            .append(displayDiv);
     }
 }
 
@@ -325,11 +382,14 @@ $(document).ready(function() {
         event.preventDefault();
         var videoId = $(this).attr("data-videoId");
         var audioId = $(this).attr("data-audioId");
+        var thumbnail = $(this).attr("data-thumbnail");
+        var videoTitle = $(this).attr("data-videoTitle");
+        var audioTitle = $(this).attr("data-audioTitle");
         $("#main-display").empty();
         $("#main-display").append("<div id='audioPlayer'></div>");
         $("#main-display").append("<div id='videoPlayer'></div>");
-        addNumberInput($("#main-display"), 7);
-        addLikeButton($("#main-display"));
+        addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
+        addLikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
         addDislikeButton($("#main-display"));
         onYouTubeIframeAPIReady(videoId);
         console.log("the audioID is: " + audioId);
@@ -338,38 +398,50 @@ $(document).ready(function() {
     });
 
 
-    function addLikeButton(divId) {
+    function addLikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
 
         // console.log('Add Like to ', divId);
         $("<button>").html("Like ")
             .attr("id", "upVoteBtn")
             .addClass("btn btn-primary")
             .attr("type", "button")
+            .data("videoId", videoId)
+            .data("audioId", audioId)
+            .data("thumbnail", thumbnail)
+            .data("videoTitle", videoTitle)
+            .data("audioTitle", audioTitle)
             .appendTo(divId)
             .on("click", function() {
                 console.log("liked");
-                //firebcse update prop in real time when ready.
+                upvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this)); //firebcse update prop in real time when ready.
+
             });
     }
 
-    function addDislikeButton(divId) {
+    function addDislikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
         $("<button>").html("Dislike ")
             .attr("id", "downVoteBtn")
             .addClass("btn btn-danger")
             .attr("type", "button")
+            .data("videoId", videoId)
+            .data("audioId", audioId)
+            .data("thumbnail", thumbnail)
+            .data("videoTitle", videoTitle)
+            .data("audioTitle", audioTitle)
             .appendTo(divId)
             .on("click", function() {
                 console.log("disliked");
+                downvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this));
                 //firebcse update prop in real time when ready.
             });
     }
 
- function addNumberInput(divId, likes) {
+    function addNumberInput(divId, likes) {
         $("<div>").html(likes)
             .attr("type", "text")
             .attr("id", "likesDisplay")
             .appendTo(divId)
-}
+    }
 
     // console.log('Document Loaded...FIRE \'D MISSILES!!!');
     // addLikeButton($("#main-display"));
