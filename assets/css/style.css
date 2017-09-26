@@ -117,5 +117,7 @@ img:hover {
 #upVoteBtn{
 	margin-right: 2%
 }
-
+#likesDisplay{
+	opacity:0;
+}
 
