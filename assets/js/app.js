@@ -127,39 +127,73 @@ $.ajax({
  */
 function saveMashup(button) {
   database.ref().child("trending").push({
-    videoID: button.attr("videoId"),
-    audioID: button.attr("audioId"),
+    videoID: button.data("videoId"),
+    audioID: button.data("audioId"),
     upvotes: 1,
-    videoThumbnail: button.attr("videoThumbnail"),
-    title: button.attr("title"),
+    thumbnail: button.data("thumbnail"),
+    videoTitle: button.data("videoTitle"),
+    audioTitle: button.data("audioTitle"),
     dateAdded: firebase.database.ServerValue.TIMESTAMP
   });
 }
 
-function upvoteMashup(activeVideoID, button) {
+//Still need to test when there are different mashups with the same videoID
+function upvoteMashup(activeVideoID, activeAudioID, button) {
   console.log("running");
-  var isMatch = false;
-  var matchIndex;
-  database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).on("value", function(snapshot){
+  database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot){
     var currentSnapshot = snapshot.val();
     console.log(currentSnapshot);
-    var theKey;
+    var theKey = "";
+    var theVideoID;
+    var theAudioID;
+    var theTitle;
+    var theThumbnail;
     var currentUpvotes;
     for (var key in currentSnapshot) {
-      console.log("key is:  " + key);
-      console.log("upvotes is: " + currentSnapshot[key].upvotes);
-      theKey = key; 
-      currentUpvotes = currentSnapshot[key].upvotes;
-      currentUpvotes++;
+      if(currentSnapshot[key].audioID == activeAudioID) {
+        theKey = key; 
+        currentUpvotes = currentSnapshot[key].upvotes;
+        currentUpvotes++;
+        database.ref("/trending/"+theKey+"/upvotes").set(currentUpvotes);
+        console.log("key is:  " + key);
+        console.log("upvotes is: " + currentSnapshot[key].upvotes);
+      }
     }
-    var updates = {};
-    //updates["/trending/" + key] 
-    console.log(theKey);
-    updates = {upvotes: currentUpvotes};
-    database.ref("/trending/"+theKey).update(updates);
+    if(!theKey) {
+      saveMashup(button);
+    }
+  }, function(errorObject) {
+    console.log("Failed" + errorObject.code);
+    console.log("no match"); 
+    saveMashup(button);
   });
-  // saveMashup(button);
-  // console.log("no match"); 
+}
+
+function downvoteMashup(activeVideoID, activeAudioID, button) {
+  console.log("running");
+  database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot){
+    var currentSnapshot = snapshot.val();
+    console.log(currentSnapshot);
+    var theKey = "";
+    var theVideoID;
+    var theAudioID;
+    var theTitle;
+    var theThumbnail;
+    var currentUpvotes;
+    for (var key in currentSnapshot) {
+      if(currentSnapshot[key].audioID == activeAudioID) {
+        theKey = key; 
+        currentUpvotes = currentSnapshot[key].upvotes;
+        currentUpvotes--;
+        database.ref("/trending/"+theKey+"/upvotes").set(currentUpvotes);
+        console.log("key is:  " + key);
+        console.log("upvotes is: " + currentSnapshot[key].upvotes);
+      }
+    }
+  }, function(errorObject) {
+    console.log("Failed" + errorObject.code);
+    console.log("no match"); 
+  });
 }
 
 function findVideoByFirebaseID(id, cb_success, cb_err) {
@@ -197,21 +231,21 @@ function getRandomVideo() {
 
 $(document).ready(function() {
 
-    var randomEntry = getRandomVideo().then(function(data) {
-        // console.log('run after', data);
-    });
+    // var randomEntry = getRandomVideo().then(function(data) {
+    //     // console.log('run after', data);
+    // });
+    console.log(getRandomVideo());
+    upvoteMashup("matt1");
 
-    upvoteMashup("matt3");
-
-    $("#test").on('click', function() {
-      // database.ref().child("trending").push({
-      //   videoID: "test",
-      //   audioID: "test",
-      //   upvotes: 0,
-      //   videoThumbnail: "test",
-      //   title: "test",
-      // })
-    });
+    // $("#test").on('click', function() {
+    //   // database.ref().child("trending").push({
+    //   //   videoID: "test",
+    //   //   audioID: "test",
+    //   //   upvotes: 0,
+    //   //   videoThumbnail: "test",
+    //   //   title: "test",
+    //   // })
+    // });
 })
 
 function displayItem(title, videoId, thubmnail) {
