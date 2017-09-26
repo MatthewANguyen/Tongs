@@ -211,49 +211,51 @@ function display(displayItem, num, bool) {
     var displayDiv = $("<div></div>");
     displayDiv.addClass("resultCard");
     displayDiv.addClass("col-xs-12");
-
+    displayDiv.attr("data-thumbnail", displayItem.thumbnail);
+    displayDiv.attr("data-audioTitle", displayItem.audioTitle);
+    displayDiv.attr("data-videoTitle", displayItem.videoTitle);
     if (bool) {
         $(displayDiv).attr("data-videoId", displayItem.videoId);
-        $(displayDiv).attr("data-audioId", "5OKdbc0DYpM"); //displayItem.audioId
+        $(displayDiv).attr("data-audioId", "5OKdbc0DYpM"); //getRandomVideo();
     } else {
-        $(displayDiv).attr("data-videoId", "3UUZgiQHlQU"); //displayItem.videoId
+        $(displayDiv).attr("data-videoId", "3UUZgiQHlQU"); //getRandomVideo();
         $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
 
-    if(bool){
-    // Add image to container
-    $("<div>").addClass("col-xs-4")
-        .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
-        .addClass("grow")
-        // .css("width","100%")
-        .attr("data-videoId", displayItem.videoId)
-        .appendTo(displayDiv);
+    if (bool) {
+        // Add image to container
+        $("<div>").addClass("col-xs-4")
+            .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+            .addClass("grow")
+            // .css("width","100%")
+            .attr("data-videoId", displayItem.videoId)
+            .appendTo(displayDiv);
 
-    // Add title to container
-    $("<div>").addClass("col-xs-8")
-        .addClass("titleDisplay")
-        .append("<h3>" + displayItem.videoTitle + "</h3>")
-        .appendTo(displayDiv);
+        // Add title to container
+        $("<div>").addClass("col-xs-8")
+            .addClass("titleDisplay")
+            .append("<h3>" + displayItem.videoTitle + "</h3>")
+            .appendTo(displayDiv);
 
-    $("#main-display")
-        .append(displayDiv);
-    }else{
+        $("#main-display")
+            .append(displayDiv);
+    } else {
 
-    // Add image to container
-    $("<div>").addClass("col-xs-4")
-        .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
-        .addClass("grow")
-        // .css("width","100%")
-        .attr("data-videoId", displayItem.videoId)
-        .appendTo(displayDiv);
-    // Add title to container
-    $("<div>").addClass("col-xs-8")
-        .addClass("titleDisplay")
-        .append("<h3>" + displayItem.audioTitle + "</h3>")
-        .appendTo(displayDiv);
+        // Add image to container
+        $("<div>").addClass("col-xs-4")
+            .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+            .addClass("grow")
+            // .css("width","100%")
+            .attr("data-videoId", displayItem.videoId)
+            .appendTo(displayDiv);
+        // Add title to container
+        $("<div>").addClass("col-xs-8")
+            .addClass("titleDisplay")
+            .append("<h3>" + displayItem.audioTitle + "</h3>")
+            .appendTo(displayDiv);
 
-    $("#main-display")
-        .append(displayDiv);
+        $("#main-display")
+            .append(displayDiv);
     }
 }
 
@@ -313,11 +315,14 @@ $(document).ready(function() {
         event.preventDefault();
         var videoId = $(this).attr("data-videoId");
         var audioId = $(this).attr("data-audioId");
+        var thumbnail = $(this).attr("data-thumbnail");
+        var videoTitle = $(this).attr("data-videoTitle");
+        var audioTitle = $(this).attr("data-audioTitle");
         $("#main-display").empty();
         $("#main-display").append("<div id='audioPlayer'></div>");
         $("#main-display").append("<div id='videoPlayer'></div>");
-        addNumberInput($("#main-display"), 7);
-        addLikeButton($("#main-display"));
+        addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
+        addLikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
         addDislikeButton($("#main-display"));
         onYouTubeIframeAPIReady(videoId);
         console.log("the audioID is: " + audioId);
@@ -326,38 +331,50 @@ $(document).ready(function() {
     });
 
 
-    function addLikeButton(divId) {
+    function addLikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
 
         // console.log('Add Like to ', divId);
         $("<button>").html("Like ")
             .attr("id", "upVoteBtn")
             .addClass("btn btn-info")
             .attr("type", "button")
+            .data("videoId", videoId)
+            .data("audioId", audioId)
+            .data("thumbnail", thumbnail)
+            .data("videoTitle", videoTitle)
+            .data("audioTitle", audioTitle)
             .appendTo(divId)
             .on("click", function() {
                 console.log("liked");
-                //firebcse update prop in real time when ready.
+                upvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this)); //firebcse update prop in real time when ready.
+
             });
     }
 
-    function addDislikeButton(divId) {
+    function addDislikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
         $("<button>").html("Dislike ")
             .attr("id", "downVoteBtn")
             .addClass("btn btn-info")
             .attr("type", "button")
+            .data("videoId", videoId)
+            .data("audioId", audioId)
+            .data("thumbnail", thumbnail)
+            .data("videoTitle", videoTitle)
+            .data("audioTitle", audioTitle)
             .appendTo(divId)
             .on("click", function() {
                 console.log("disliked");
+                downvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this));
                 //firebcse update prop in real time when ready.
             });
     }
 
- function addNumberInput(divId, likes) {
+    function addNumberInput(divId, likes) {
         $("<div>").html(likes)
             .attr("type", "text")
             .attr("id", "likesDisplay")
             .appendTo(divId)
-}
+    }
 
     // console.log('Document Loaded...FIRE \'D MISSILES!!!');
     addLikeButton($("#main-display"));
