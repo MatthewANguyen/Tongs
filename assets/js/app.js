@@ -222,21 +222,6 @@ function getRandomVideo() {
 
 $(document).ready(function() {
 
-    // var randomEntry = getRandomVideo().then(function(data) {
-    //     // console.log('run after', data);
-    // });
-    console.log(getRandomVideo());
-    upvoteMashup("matt1");
-
-    // $("#test").on('click', function() {
-    //   // database.ref().child("trending").push({
-    //   //   videoID: "test",
-    //   //   audioID: "test",
-    //   //   upvotes: 0,
-    //   //   videoThumbnail: "test",
-    //   //   title: "test",
-    //   // })
-    // });
 })
 
 function displayItem(videoTitle, videoId, thumbnail) {
@@ -340,22 +325,36 @@ function displayResults(response, isVideo) {
 }
 
 function loadFromAjax(isVideo) {
-  queryString.q = $("#search-input1").val().trim();
-  ajaxCall(isVideo);
+    queryString.q = $("#search-input1").val().trim();
+    ajaxCall(isVideo);
 }
 
 
 $(document).ready(function() {
     $("#video1").on("click", function() {
         event.preventDefault();
+
+        var emptyInput = $("#search-input1").val();
+        if (emptyInput == "") {
+            console.log("What the heck")
+            return;
+        }
+        queryString.q = $("#search-input1").val().trim();
         loadFromAjax(true);
     });
 
     $("#audio1").on("click", function() {
         event.preventDefault();
+
+        var emptyInput = $("#search-input1").val();
+        if (emptyInput == "") {
+            console.log("What the heck")
+            return;
+        }
+
+        queryString.q = $("#search-input1").val().trim();
         loadFromAjax(false);
     });
-
 
     // $(".resultCard").on("click", function() {
     $("body").on("click", ".resultCard", function() {
@@ -367,25 +366,26 @@ $(document).ready(function() {
         var audioTitle = $(this).attr("data-audioTitle");
 
         $("#main-display").empty();
+        $("#side-search-bar").empty();
         $("#side-search-bar").append(
-          $("<div>").addClass("col-md-2").append(
-            $("<div>").addClass("input-group home-small").append(
-              $("<div>").addClass("input-group search"))
-            .append(
-              $("<input>").attr("type", "text").attr("id", "search-input1").addClass("form-control-small").attr("placeholder", "Search for..."))
-            .append(
-              $("<button>").attr("type", "button").attr("id", "video1").addClass("btn-nav btn-primary btn-xs").text("Video")
-                .on("click", function() {
-                  event.preventDefault();
-                  loadFromAjax(true);
-                }))
-            .append(
-              $("<button>").attr("type", "button").attr("id", "audio1").addClass("btn-nav btn-secondary btn-xs").text("Audio")
-                .on("click", function() {
-                    event.preventDefault();
-                    loadFromAjax(false);
-                  }))
-          )
+            $("<div>").addClass("col-md-2").append(
+                $("<div>").addClass("input-group home-small").append(
+                    $("<div>").addClass("input-group search"))
+                .append(
+                    $("<input>").attr("type", "text").attr("id", "search-input1").addClass("form-control-small").attr("placeholder", "Search for..."))
+                .append(
+                    $("<button>").attr("type", "button").attr("id", "video1").addClass("btn-nav btn-primary btn-xs").text("Video")
+                    .on("click", function() {
+                        event.preventDefault();
+                        loadFromAjax(true);
+                    }))
+                .append(
+                    $("<button>").attr("type", "button").attr("id", "audio1").addClass("btn-nav btn-secondary btn-xs").text("Audio")
+                    .on("click", function() {
+                        event.preventDefault();
+                        loadFromAjax(false);
+                    }))
+            )
         );
         // <div class="col-md-2">
         //         <div class="input-group home-small">
@@ -400,7 +400,7 @@ $(document).ready(function() {
         $("#main-display").append("<div id='videoPlayer'></div>");
         addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
         addLikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
-        addDislikeButton($("#main-display"));
+        addDislikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
         onYouTubeIframeAPIReady(videoId);
         console.log("the audioID is: " + audioId);
         playAudio(audioId);
@@ -413,7 +413,7 @@ $(document).ready(function() {
         // console.log('Add Like to ', divId);
         $("<button>").html("Like ")
             .attr("id", "upVoteBtn")
-            .addClass("btn btn-info")
+            .addClass("btn btn-primary")
             .attr("type", "button")
             .data("videoId", videoId)
             .data("audioId", audioId)
@@ -431,7 +431,7 @@ $(document).ready(function() {
     function addDislikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
         $("<button>").html("Dislike ")
             .attr("id", "downVoteBtn")
-            .addClass("btn btn-info")
+            .addClass("btn btn-danger")
             .attr("type", "button")
             .data("videoId", videoId)
             .data("audioId", audioId)
@@ -454,8 +454,8 @@ $(document).ready(function() {
     }
 
     // console.log('Document Loaded...FIRE \'D MISSILES!!!');
-    addLikeButton($("#main-display"));
-    addDislikeButton($("#main-display"));
+    // addLikeButton($("#main-display"));
+    // addDislikeButton($("#main-display"));
 
 
     $(".btn-info").on("click", function() {
