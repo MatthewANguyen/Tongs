@@ -109,15 +109,6 @@ function toQueryString() {
     return baseUrl + "?" + qString.trim('&');
 }
 
-$.ajax({
-    url: toQueryString(),
-    method: "GET",
-    dataType: "json"
-}).done(function(response) {
-    //response == json tree
-    //onYouTubeIframeAPIReady(response.id)
-    // console.log(response);
-});
 
 /**
  * [saveMashup writes the mashup information to firebase]
@@ -126,74 +117,74 @@ $.ajax({
  * @return {[void]}          [description]
  */
 function saveMashup(button) {
-  database.ref().child("trending").push({
-    videoID: button.data("videoId"),
-    audioID: button.data("audioId"),
-    upvotes: 1,
-    thumbnail: button.data("thumbnail"),
-    videoTitle: button.data("videoTitle"),
-    audioTitle: button.data("audioTitle"),
-    dateAdded: firebase.database.ServerValue.TIMESTAMP
-  });
+    database.ref().child("trending").push({
+        videoId: button.data("videoId"),
+        audioId: button.data("audioId"),
+        upvotes: 1,
+        thumbnail: button.data("thumbnail"),
+        videoTitle: button.data("videoTitle"),
+        audioTitle: button.data("audioTitle"),
+        dateAdded: firebase.database.ServerValue.TIMESTAMP
+    });
 }
 
 //Still need to test when there are different mashups with the same videoID
 function upvoteMashup(activeVideoID, activeAudioID, button) {
-  console.log("running");
-  database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot){
-    var currentSnapshot = snapshot.val();
-    console.log(currentSnapshot);
-    var theKey = "";
-    var theVideoID;
-    var theAudioID;
-    var theTitle;
-    var theThumbnail;
-    var currentUpvotes;
-    for (var key in currentSnapshot) {
-      if(currentSnapshot[key].audioID == activeAudioID) {
-        theKey = key; 
-        currentUpvotes = currentSnapshot[key].upvotes;
-        currentUpvotes++;
-        database.ref("/trending/"+theKey+"/upvotes").set(currentUpvotes);
-        console.log("key is:  " + key);
-        console.log("upvotes is: " + currentSnapshot[key].upvotes);
-      }
-    }
-    if(!theKey) {
-      saveMashup(button);
-    }
-  }, function(errorObject) {
-    console.log("Failed" + errorObject.code);
-    console.log("no match"); 
-    saveMashup(button);
-  });
+    console.log("running");
+    database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot) {
+        var currentSnapshot = snapshot.val();
+        console.log(currentSnapshot);
+        var theKey = "";
+        var theVideoID;
+        var theAudioID;
+        var theTitle;
+        var theThumbnail;
+        var currentUpvotes;
+        for (var key in currentSnapshot) {
+            if (currentSnapshot[key].audioID == activeAudioID) {
+                theKey = key;
+                currentUpvotes = currentSnapshot[key].upvotes;
+                currentUpvotes++;
+                database.ref("/trending/" + theKey + "/upvotes").set(currentUpvotes);
+                console.log("key is:  " + key);
+                console.log("upvotes is: " + currentSnapshot[key].upvotes);
+            }
+        }
+        if (!theKey) {
+            saveMashup(button);
+        }
+    }, function(errorObject) {
+        console.log("Failed" + errorObject.code);
+        console.log("no match");
+        saveMashup(button);
+    });
 }
 
 function downvoteMashup(activeVideoID, activeAudioID, button) {
-  console.log("running");
-  database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot){
-    var currentSnapshot = snapshot.val();
-    console.log(currentSnapshot);
-    var theKey = "";
-    var theVideoID;
-    var theAudioID;
-    var theTitle;
-    var theThumbnail;
-    var currentUpvotes;
-    for (var key in currentSnapshot) {
-      if(currentSnapshot[key].audioID == activeAudioID) {
-        theKey = key; 
-        currentUpvotes = currentSnapshot[key].upvotes;
-        currentUpvotes--;
-        database.ref("/trending/"+theKey+"/upvotes").set(currentUpvotes);
-        console.log("key is:  " + key);
-        console.log("upvotes is: " + currentSnapshot[key].upvotes);
-      }
-    }
-  }, function(errorObject) {
-    console.log("Failed" + errorObject.code);
-    console.log("no match"); 
-  });
+    console.log("running");
+    database.ref().child("trending").orderByChild('videoID').equalTo(activeVideoID).once("value").then(function(snapshot) {
+        var currentSnapshot = snapshot.val();
+        console.log(currentSnapshot);
+        var theKey = "";
+        var theVideoID;
+        var theAudioID;
+        var theTitle;
+        var theThumbnail;
+        var currentUpvotes;
+        for (var key in currentSnapshot) {
+            if (currentSnapshot[key].audioID == activeAudioID) {
+                theKey = key;
+                currentUpvotes = currentSnapshot[key].upvotes;
+                currentUpvotes--;
+                database.ref("/trending/" + theKey + "/upvotes").set(currentUpvotes);
+                console.log("key is:  " + key);
+                console.log("upvotes is: " + currentSnapshot[key].upvotes);
+            }
+        }
+    }, function(errorObject) {
+        console.log("Failed" + errorObject.code);
+        console.log("no match");
+    });
 }
 
 function findVideoByFirebaseID(id, cb_success, cb_err) {
@@ -248,16 +239,16 @@ $(document).ready(function() {
     // });
 })
 
-function displayItem(videoTitle, videoId, thubmnail) {
+function displayItem(videoTitle, videoId, thumbnail) {
     this.audioTitle = "";
     this.videoTitle = videoTitle;
     this.audioId = "";
     this.videoId = videoId;
-    this.thubmnail = thubmnail;
+    this.thumbnail = thumbnail;
     this.likes = 0;
 }
 
-function display(displayItem, num, bool) {
+function display(displayItem, num, isVideo) {
     if (num === 0) {
         $("#main-display").empty();
     }
@@ -269,18 +260,18 @@ function display(displayItem, num, bool) {
     displayDiv.attr("data-thumbnail", displayItem.thumbnail);
     displayDiv.attr("data-audioTitle", displayItem.audioTitle);
     displayDiv.attr("data-videoTitle", displayItem.videoTitle);
-    if (bool) {
+    if (isVideo) {
         $(displayDiv).attr("data-videoId", displayItem.videoId);
-        $(displayDiv).attr("data-audioId", "5OKdbc0DYpM"); //getRandomVideo();
+        $(displayDiv).attr("data-audioId", "vEHMpSIhfTE"); //getRandomVideo();
     } else {
         $(displayDiv).attr("data-videoId", "3UUZgiQHlQU"); //getRandomVideo();
         $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
 
-    if (bool) {
+    if (isVideo) {
         // Add image to container
         $("<div>").addClass("col-xs-4")
-            .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+            .append("<img src='" + displayItem.thumbnail + "' style='margin-bottom:2%' />")
             .addClass("grow")
             // .css("width","100%")
             .attr("data-videoId", displayItem.videoId)
@@ -298,7 +289,7 @@ function display(displayItem, num, bool) {
 
         // Add image to container
         $("<div>").addClass("col-xs-4")
-            .append("<img src='" + displayItem.thubmnail + "' style='margin-bottom:2%' />")
+            .append("<img src='" + displayItem.thumbnail + "' style='margin-bottom:2%' />")
             .addClass("grow")
             // .css("width","100%")
             .attr("data-videoId", displayItem.videoId)
@@ -314,28 +305,28 @@ function display(displayItem, num, bool) {
     }
 }
 
-function ajaxCall(bool) {
+function ajaxCall(isVideo) {
     $.ajax({
         url: toQueryString(),
         method: "GET",
         dataType: "json"
     }).done(function(response) {
         // console.log('queryString', toQueryString);
-        displayResults(response, bool);
+        displayResults(response, isVideo);
     });
 }
 // CANNOT SEPERATE THESE FUNCTION BECAUSE THE "RESPONSE." CALLS ARE REFERENCING NOTHING. LINES 114 - 117
-function displayResults(response, bool) {
+function displayResults(response, isVideo) {
     // console.log("start of for loop");
     for (var i = 0; i < response.items.length; i++) {
         var videoId = response.items[i].id.videoId;
         var title = response.items[i].snippet.title;
         // console.log("response.items.snippet", response.items[i].snippet.thumbnails)
-        var thubmnail = response.items[i].snippet.thumbnails.default.url;
+        var thumbnail = response.items[i].snippet.thumbnails.default.url;
 
-        var result = new displayItem(title, videoId, thubmnail);
+        var result = new displayItem(title, videoId, thumbnail);
 
-        if (!bool) {
+        if (!isVideo) {
             result.audioId = result.videoId;
             result.videoId = "";
             result.audioTitle = title;
@@ -344,24 +335,25 @@ function displayResults(response, bool) {
         }
 
         // console.log("about to display the " + i + " element");
-        display(result, i, bool);
+        display(result, i, isVideo);
     }
+}
+
+function loadFromAjax(isVideo) {
+  queryString.q = $("#search-input1").val().trim();
+  ajaxCall(isVideo);
 }
 
 
 $(document).ready(function() {
     $("#video1").on("click", function() {
         event.preventDefault();
-        queryString.q = $("#search-input1").val().trim();
-        // console.log(queryString.q);
-        ajaxCall(true);
+        loadFromAjax(true);
     });
 
     $("#audio1").on("click", function() {
         event.preventDefault();
-        queryString.q = $("#search-input1").val().trim();
-        // console.log(queryString.q);
-        ajaxCall(false); //pass through bool?
+        loadFromAjax(false);
     });
 
 
@@ -373,7 +365,37 @@ $(document).ready(function() {
         var thumbnail = $(this).attr("data-thumbnail");
         var videoTitle = $(this).attr("data-videoTitle");
         var audioTitle = $(this).attr("data-audioTitle");
+
         $("#main-display").empty();
+        $("#side-search-bar").append(
+          $("<div>").addClass("col-md-2").append(
+            $("<div>").addClass("input-group home-small").append(
+              $("<div>").addClass("input-group search"))
+            .append(
+              $("<input>").attr("type", "text").attr("id", "search-input1").addClass("form-control-small").attr("placeholder", "Search for..."))
+            .append(
+              $("<button>").attr("type", "button").attr("id", "video1").addClass("btn-nav btn-primary btn-xs").text("Video")
+                .on("click", function() {
+                  event.preventDefault();
+                  loadFromAjax(true);
+                }))
+            .append(
+              $("<button>").attr("type", "button").attr("id", "audio1").addClass("btn-nav btn-secondary btn-xs").text("Audio")
+                .on("click", function() {
+                    event.preventDefault();
+                    loadFromAjax(false);
+                  }))
+          )
+        );
+        // <div class="col-md-2">
+        //         <div class="input-group home-small">
+        //             <div class="input-group search">
+        //                 <input type="text" id="search-input" class="form-control-small" placeholder="Search for...">
+        //             </div>
+        //             <button type="button" id="video" class="btn-nav btn-primary btn-sm">Video</button>
+        //             <button type="button" id="song" class="btn-nav btn-secondary btn-sm">Audio</button>
+        //         </div>
+        //     </div>
         $("#main-display").append("<div id='audioPlayer'></div>");
         $("#main-display").append("<div id='videoPlayer'></div>");
         addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
