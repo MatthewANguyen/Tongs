@@ -18,6 +18,12 @@ header {
 h1{
 	font-size: 200%
 }
+h3{
+	opacity: 0.5;
+}
+h3:hover {
+    opacity:2;
+}
 
 #purpose {
     color: blue;
@@ -107,4 +113,9 @@ img:hover {
   width: 110%;
   height: 110%;
 }
+
+#upVoteBtn{
+	margin-right: 2%
+}
+
 

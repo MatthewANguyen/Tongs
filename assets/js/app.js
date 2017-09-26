@@ -338,6 +338,12 @@ function displayResults(response, bool) {
 $(document).ready(function() {
     $("#video1").on("click", function() {
         event.preventDefault();
+
+        var emptyInput = $("#search-input1").val();
+        if(emptyInput == ""){
+            console.log("What the heck")
+            return;
+        }
         queryString.q = $("#search-input1").val().trim();
         // console.log(queryString.q);
         ajaxCall(true);
@@ -345,11 +351,17 @@ $(document).ready(function() {
 
     $("#audio1").on("click", function() {
         event.preventDefault();
+
+        var emptyInput = $("#search-input1").val();
+        if(emptyInput == ""){
+            console.log("What the heck")
+            return;
+        }
+        
         queryString.q = $("#search-input1").val().trim();
         // console.log(queryString.q);
         ajaxCall(false); //pass through bool?
     });
-
 
     // $(".resultCard").on("click", function() {
     $("body").on("click", ".resultCard", function() {
@@ -377,7 +389,7 @@ $(document).ready(function() {
         // console.log('Add Like to ', divId);
         $("<button>").html("Like ")
             .attr("id", "upVoteBtn")
-            .addClass("btn btn-info")
+            .addClass("btn btn-primary")
             .attr("type", "button")
             .data("videoId", videoId)
             .data("audioId", audioId)
@@ -395,7 +407,7 @@ $(document).ready(function() {
     function addDislikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
         $("<button>").html("Dislike ")
             .attr("id", "downVoteBtn")
-            .addClass("btn btn-info")
+            .addClass("btn btn-danger")
             .attr("type", "button")
             .data("videoId", videoId)
             .data("audioId", audioId)
@@ -418,8 +430,8 @@ $(document).ready(function() {
     }
 
     // console.log('Document Loaded...FIRE \'D MISSILES!!!');
-    addLikeButton($("#main-display"));
-    addDislikeButton($("#main-display"));
+    // addLikeButton($("#main-display"));
+    // addDislikeButton($("#main-display"));
 
 
     $(".btn-info").on("click", function() {
