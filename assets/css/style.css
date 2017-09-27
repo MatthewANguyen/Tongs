@@ -120,4 +120,10 @@ img:hover {
 #likesDisplay{
 	opacity:0;
 }
-
+#likeDisplay{
+	background-color: white;
+	color: black;
+	border-style: groove;
+	border-width: 5px;
+	max-width: 100px;
+}
