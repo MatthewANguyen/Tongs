@@ -1,12 +1,12 @@
 audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI", "y6120QOlsfU", "XUhVCoTsBaM", "r0KFfXiBLqk", "NTa6Xbzfq1U", "Y82jDHRrswc"];
-videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA"]; 
+videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA"];
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyC2HA7n0Xg2eXr8chPxyWFGr8dgNM6UWbY",
     authDomain: "tongs-573e7.firebaseapp.com",
     databaseURL: "https://tongs-573e7.firebaseio.com",
     projectId: "tongs-573e7",
-    storageBucket: "tongs-573e7.appspot.com", 
+    storageBucket: "tongs-573e7.appspot.com",
     messagingSenderId: "483788713808"
 };
 firebase.initializeApp(config);
@@ -20,8 +20,7 @@ var queryString = {
     q: "",
     type: "video",
     key: "AIzaSyDsa_IgEMmQB1LC2r251MoZVFJmWr9al8Y"
-
-}
+};
 
 function onYouTubeIframeAPIReady(videoId) {
     player = new YT.Player('videoPlayer', {
@@ -33,7 +32,7 @@ function onYouTubeIframeAPIReady(videoId) {
             'onReady': mute
         }
     });
-}
+};
 
 function playAudio(audioId) {
     console.log("hey we are in the playAudio function");
@@ -45,21 +44,20 @@ function playAudio(audioId) {
         events: {
             'onReady': blind
         }
-
     });
-}
+};
 
 function mute(event) {
     event.target.playVideo().mute();
-}
+};
 
 function blind(event) {
     event.target.playVideo();
-}
+};
 
 function stopVideo() {
     player.stopVideo();
-}
+};
 
 function toQueryString() {
     var baseUrl = "https://www.googleapis.com/youtube/v3/search"
@@ -68,7 +66,7 @@ function toQueryString() {
         qString += '&' + i + '=' + this.queryString[i];
     }
     return baseUrl + "?" + qString.trim('&');
-}
+};
 
 /**
  * [saveMashup writes the mashup information to firebase]
@@ -87,16 +85,18 @@ function saveMashup(button) {
     });
 }
 
-function randomVideo(){
- var randomNumber = audioIdArray.length;
- var randomEntry = Math.floor((Math.random()) * randomNumber)
- return audioIdArray[randomEntry];
-}
-function randomAudio(){
+function randomVideo() {
+    var randomNumber = audioIdArray.length;
+    var randomEntry = Math.floor((Math.random()) * randomNumber)
+    return videoIdArray[randomEntry];
+};
+
+function randomAudio() {
     var randomNumber = audioIdArray.length;
     var randomEntry = Math.floor((Math.random()) * randomNumber)
     return audioIdArray[randomEntry];
-}
+};
+
 function upvoteMashup(activeVideoID, activeAudioID, button) {
     console.log("running");
     database.ref().child("trending").orderByChild('videoId').equalTo(activeVideoID).once("value").then(function(snapshot) {
@@ -176,7 +176,7 @@ function displayItem(videoTitle, videoId, thumbnail) {
     this.videoId = videoId;
     this.thumbnail = thumbnail;
     this.likes = 0;
-}
+};
 
 function display(displayItem, num, isVideo) {
     if (num === 0) {
@@ -244,7 +244,7 @@ function displayResults(response, isVideo) {
         var videoId = response.items[i].id.videoId;
         var title = response.items[i].snippet.title;
         var thumbnail = response.items[i].snippet.thumbnails.default.url;
-        var result = new displayItem(title, videoId, thumbnail);     
+        var result = new displayItem(title, videoId, thumbnail);
         if (!isVideo) {
             result.audioId = result.videoId;
             result.videoId = "";
@@ -274,7 +274,7 @@ $(document).ready(function() {
         event.preventDefault();
         var emptyInput = $("#search-input1").val();
         if (emptyInput == "") {
-                console.log("What the heck")
+            console.log("What the heck")
             return;
         }
         loadFromAjax(false);
@@ -323,50 +323,51 @@ $(document).ready(function() {
         console.log("the audioID is: " + audioId);
         playAudio(audioId);
     });
+
     function readFirebaseTrending() {
-      var arrayOfTrending = [];
-      database.ref().child("trending").orderByChild("upvotes").limitToLast(5).once("value").then(function(snapshot) {
-        var snapshot = snapshot.val();
-        for (var key in snapshot) {
-            var result = new displayItem(snapshot[key].videoTitle, snapshot[key].videoId, snapshot[key].thumbnail);
-            result.audioTitle = snapshot[key].audioTitle;
-            result.audioId = snapshot[key].audioId;
-            result.likes = snapshot[key].upvotes;
-            arrayOfTrending.push(result);
-        }
-        console.log(arrayOfTrending);
-        return arrayOfTrending;
-      });
+        var arrayOfTrending = [];
+        database.ref().child("trending").orderByChild("upvotes").limitToLast(5).once("value").then(function(snapshot) {
+            var snapshot = snapshot.val();
+            for (var key in snapshot) {
+                var result = new displayItem(snapshot[key].videoTitle, snapshot[key].videoId, snapshot[key].thumbnail);
+                result.audioTitle = snapshot[key].audioTitle;
+                result.audioId = snapshot[key].audioId;
+                result.likes = snapshot[key].upvotes;
+                arrayOfTrending.push(result);
+            }
+            console.log(arrayOfTrending);
+            return arrayOfTrending;
+        });
     }
 
-   // function firebaseToDisplay(divId){
-   //  var displayItemArray = readFirebaseTrending();
-   //  console.log(displayItemArray);
-   //  for(var i = 0; i < displayItemArray.length; i++){
-   //      var displayDiv = $("<div></div>");
-   //      displayDiv.addClass("resultCard");
-   //      displayDiv.addClass("col-xs-12");
-   //      displayDiv.attr("data-thumbnail", displayItemArray[i].thumbnail);
-   //      displayDiv.attr("data-audioTitle", displayItemArray[i].audioTitle);
-   //      displayDiv.attr("data-videoTitle", displayItemArray[i].videoTitle);
-   //      displayDiv.attr("data-videoId", displayItemArray[i].audioId);
-   //      displayDiv.attr("data-audioId", displayItemArray[i].audioId);
-   //      displayDiv.appendTo(divId);
-   //  }
-   // }
+    // function firebaseToDisplay(divId){
+    //  var displayItemArray = readFirebaseTrending();
+    //  console.log(displayItemArray);
+    //  for(var i = 0; i < displayItemArray.length; i++){
+    //      var displayDiv = $("<div></div>");
+    //      displayDiv.addClass("resultCard");
+    //      displayDiv.addClass("col-xs-12");
+    //      displayDiv.attr("data-thumbnail", displayItemArray[i].thumbnail);
+    //      displayDiv.attr("data-audioTitle", displayItemArray[i].audioTitle);
+    //      displayDiv.attr("data-videoTitle", displayItemArray[i].videoTitle);
+    //      displayDiv.attr("data-videoId", displayItemArray[i].audioId);
+    //      displayDiv.attr("data-audioId", displayItemArray[i].audioId);
+    //      displayDiv.appendTo(divId);
+    //  }
+    // }
 
-    function addLikeDisplay(divId,likes){
+    function addLikeDisplay(divId, likes) {
         $("<p>").html(likes)
             .attr("id", "likeDisplay")
             .appendTo(divId);
     }
 
-    function chancgeDislikes(divId, likes){
+    function chancgeDislikes(divId, likes) {
         console.log("inside of change likes, the likes are: ", likes);
         divId.html(likes--);
     }
 
-    function chancgeLikes(divId, likes){
+    function chancgeLikes(divId, likes) {
         console.log("inside of change likes, the likes are: ", likes);
         divId.html(likes++);
     }
@@ -409,7 +410,7 @@ $(document).ready(function() {
                 downvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this));
                 //firebcse update prop in real time when ready.
                 unbindVoteButtons();
-                
+
             });
     }
 
@@ -421,8 +422,8 @@ $(document).ready(function() {
     }
 
     function unbindVoteButtons() {
-      $("#upVoteBtn").unbind();
-      $("#downVoteBtn").unbind();
+        $("#upVoteBtn").unbind();
+        $("#downVoteBtn").unbind();
     }
 
 
@@ -430,5 +431,5 @@ $(document).ready(function() {
         console.log("Yep it working")
     })
 
-   
+
 });
