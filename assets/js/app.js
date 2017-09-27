@@ -1,4 +1,4 @@
-audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI" ];
+audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI", "y6120QOlsfU", "XUhVCoTsBaM", "r0KFfXiBLqk", "NTa6Xbzfq1U", "Y82jDHRrswc"];
 videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA"]; 
 // Initialize Firebase
 var config = {
@@ -6,7 +6,7 @@ var config = {
     authDomain: "tongs-573e7.firebaseapp.com",
     databaseURL: "https://tongs-573e7.firebaseio.com",
     projectId: "tongs-573e7",
-    storageBucket: "tongs-573e7.appspot.com",
+    storageBucket: "tongs-573e7.appspot.com", 
     messagingSenderId: "483788713808"
 };
 firebase.initializeApp(config);
@@ -89,7 +89,7 @@ function saveMashup(button) {
 
 function randomVideo(){
  var randomNumber = audioIdArray.length;
- var randomEntry = trendingArray[Math.floor((Math.random()) * randomNumber)]
+ var randomEntry = Math.floor((Math.random()) * randomNumber)
  return audioIdArray[randomEntry];
 }
 function randomAudio(){
@@ -190,9 +190,9 @@ function display(displayItem, num, isVideo) {
     displayDiv.attr("data-videoTitle", displayItem.videoTitle);
     if (isVideo) {
         $(displayDiv).attr("data-videoId", displayItem.videoId);
-        $(displayDiv).attr("data-audioId", randomVideo()); //getRandomVideo();
+        $(displayDiv).attr("data-audioId", randomAudio()); //getRandomVideo();
     } else {
-        $(displayDiv).attr("data-videoId", randomAudio()); //getRandomVideo();
+        $(displayDiv).attr("data-videoId", randomVideo()); //getRandomVideo();
         $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
     if (isVideo) {
