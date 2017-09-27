@@ -1,6 +1,6 @@
 html {
 	height: 100%;
-	
+
 }
 body{
 /*	background-color: blue;*/
@@ -29,7 +29,7 @@ h3:hover {
     color: blue;
     /*text-shadow: 2px 2px 2px #CCCCCC;*//*shadow Effect*/
     /*color: #ECECF6;*/
-    text-shadow: -1px -1px 1px #FFFFFF, 1px 1px 1px #000000; 
+    text-shadow: -1px -1px 1px #FFFFFF, 1px 1px 1px #000000;
     opacity: 0.5;
     font-size: 100%;
     margin-top: 25px;
@@ -42,7 +42,7 @@ h3:hover {
             transition: opacity 2s ease-in;
 }
 
- 
+
 .home {
 	margin: 10% 0px;
 }
@@ -83,6 +83,9 @@ h3:hover {
 .tittleDisplay{
 	display: inline;
 }
+#search-input1{
+	margin-bottom: 1%
+}
 
 img{
 	border-radius: 5%;
@@ -119,11 +122,40 @@ img:hover {
 }
 #likesDisplay{
 	opacity:0;
-}
+
 #likeDisplay{
 	background-color: white;
 	color: black;
 	border-style: groove;
 	border-width: 5px;
 	max-width: 100px;
+}
+
+
+iframe{
+  max-width: 100% !important
+}
+
+@media only screen and (max-width: 640px){
+  	h3{
+  		font-size: 150%
+
+
+  	}
+}
+
+@media only screen and (max-width: 480px){
+  	h3{
+  		font-size:100%
+
+  	}
+}
+@media only screen and (max-width: 320px){
+  	h3{
+		font-size: 10%;
+
+  	}
+  	body{
+  		font-size: 50%;
+  	}
 }
