@@ -124,7 +124,7 @@ img:hover {
 	opacity:0;
 }
 
-#likeDisplay{
+#likeDisplay {
 	background-color: white;
 	color: black;
 	border-style: groove;
@@ -160,3 +160,10 @@ iframe{
   		font-size: 50%;
   	}
 }
+#audio1{
+	color: white;
+	background-color:purple
+}
+
+
+
