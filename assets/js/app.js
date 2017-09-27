@@ -117,15 +117,18 @@ function upvoteMashup(activeVideoID, activeAudioID, button) {
                 database.ref("/trending/" + theKey + "/upvotes").set(currentUpvotes);
                 console.log("key is:  " + key);
                 console.log("upvotes is: " + currentSnapshot[key].upvotes);
+                $("#likeDisplay").text(currentUpvotes);
             }
         }
         if (!theKey) {
             console.log("audio doesn't match");
+            $("#likeDisplay").text(1);
             saveMashup(button);
         }
     }, function(errorObject) {
         console.log("Failed" + errorObject.code);
         console.log("no match");
+        $("#likeDisplay").text(1);
         saveMashup(button);
     });
 }
@@ -149,11 +152,13 @@ function downvoteMashup(activeVideoID, activeAudioID, button) {
                 database.ref("/trending/" + theKey + "/upvotes").set(currentUpvotes);
                 console.log("key is:  " + key);
                 console.log("upvotes is: " + currentSnapshot[key].upvotes);
+                $("#likeDisplay").text(currentUpvotes);
             }
         }
     }, function(errorObject) {
         console.log("Failed" + errorObject.code);
         console.log("no match");
+        $("#likeDisplay").text(currentUpvotes);
     });
 }
 
@@ -315,7 +320,7 @@ $(document).ready(function() {
         $("#main-display").append("<div id='audioPlayer'></div>");
         $("#main-display").append("<div id='videoPlayer'></div>");
         //addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
-        addLikeDisplay($("#main-display"), likes);
+        addLikeDisplay($("#main-display"), "?");
         addLikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, likes);
         addDislikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, likes);
         // firebaseToDisplay($("#trending"));
@@ -386,10 +391,10 @@ $(document).ready(function() {
             .appendTo(divId)
             .on("click", function() {
                 console.log("liked");
-                chancgeLikes($("#likeDisplay"), likes);
                 upvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this)); //firebcse update prop in real time when ready.
                 unbindVoteButtons();
             });
+            $("#likeDisplay").html("?");
     }
 
     function addDislikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle, likes) {
@@ -406,7 +411,6 @@ $(document).ready(function() {
             .appendTo(divId)
             .on("click", function() {
                 console.log("disliked");
-                chancgeDislikes($("#likeDisplay"), likes);
                 downvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this));
                 //firebcse update prop in real time when ready.
                 unbindVoteButtons();
