@@ -1,4 +1,5 @@
-
+audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds",  ];
+videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA"];
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyC2HA7n0Xg2eXr8chPxyWFGr8dgNM6UWbY",
@@ -227,11 +228,12 @@ function ajaxCall(isVideo) {
 }
 
 function displayResults(response, isVideo) {
+    console.log(response);
     for (var i = 0; i < response.items.length; i++) {
         var videoId = response.items[i].id.videoId;
         var title = response.items[i].snippet.title;
         var thumbnail = response.items[i].snippet.thumbnails.default.url;
-        var result = new displayItem(title, videoId, thumbnail);
+        var result = new displayItem(title, videoId, thumbnail);     
         if (!isVideo) {
             result.audioId = result.videoId;
             result.videoId = "";
@@ -261,7 +263,7 @@ $(document).ready(function() {
         event.preventDefault();
         var emptyInput = $("#search-input1").val();
         if (emptyInput == "") {
-            console.log("What the heck")
+                console.log("What the heck")
             return;
         }
         loadFromAjax(false);
@@ -299,7 +301,8 @@ $(document).ready(function() {
         );
         $("#main-display").append("<div id='audioPlayer'></div>");
         $("#main-display").append("<div id='videoPlayer'></div>");
-        addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
+        //addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
+        addLikeDisplay($("#main-display"), 25);
         addLikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
         addDislikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
         onYouTubeIframeAPIReady(videoId);
@@ -307,6 +310,33 @@ $(document).ready(function() {
         playAudio(audioId);
     });
 
+   function keyToObject(key){
+        //
+        return key;
+   }
+
+   function firebaseToDisplay(key, divId){
+    var displayItemArray = readFirebaseTrending();
+    for(var i = 0; i < displayItemArray.length; i++){
+        var displayDiv = $("<div></div>");
+        displayDiv.addClass("resultCard");
+        displayDiv.addClass("col-xs-12");
+        displayDiv.attr("data-thumbnail", displayItemArray[i].thumbnail);
+        displayDiv.attr("data-audioTitle", displayItemArray[i].audioTitle);
+        displayDiv.attr("data-videoTitle", displayItemArray[i].videoTitle);
+        displayDiv.attr("data-videoId", displayItemArray[i].audioId);
+        displayDiv.attr("data-audioId", displayItemArray[i].audioId);
+        displayDiv.appendTo(divId);
+    }
+   }
+
+    function addLikeDisplay(divId,likes){
+        $("<p>").html(likes)
+            .attr("id", "likeDisplay")
+            .appendTo(divId);
+
+
+    }
     function addLikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
         $("<button>").html("Like ")
             .attr("id", "upVoteBtn")
