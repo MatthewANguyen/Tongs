@@ -89,7 +89,7 @@ function saveMashup(button) {
 
 function randomVideo(){
  var randomNumber = audioIdArray.length;
- var randomEntry = trendingArray[Math.floor((Math.random()) * randomNumber)]
+ var randomEntry = Math.floor((Math.random()) * randomNumber)
  return audioIdArray[randomEntry];
 }
 function randomAudio(){
