@@ -89,7 +89,7 @@ function saveMashup(button) {
 
 function randomVideo(){
  var randomNumber = audioIdArray.length;
- var randomEntry = trendingArray[Math.floor((Math.random()) * randomNumber)]
+ var randomEntry = Math.floor((Math.random()) * randomNumber)
  return audioIdArray[randomEntry];
 }
 function randomAudio(){
@@ -188,11 +188,12 @@ function display(displayItem, num, isVideo) {
     displayDiv.attr("data-thumbnail", displayItem.thumbnail);
     displayDiv.attr("data-audioTitle", displayItem.audioTitle);
     displayDiv.attr("data-videoTitle", displayItem.videoTitle);
+    displayDiv.attr("data-likes", displayItem.likes);
     if (isVideo) {
         $(displayDiv).attr("data-videoId", displayItem.videoId);
-        $(displayDiv).attr("data-audioId", randomVideo()); //getRandomVideo();
+        $(displayDiv).attr("data-audioId", randomAudio()); //getRandomVideo();
     } else {
-        $(displayDiv).attr("data-videoId", randomAudio()); //getRandomVideo();
+        $(displayDiv).attr("data-videoId", randomVideo()); //getRandomVideo();
         $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
     if (isVideo) {
@@ -287,6 +288,7 @@ $(document).ready(function() {
         var thumbnail = $(this).attr("data-thumbnail");
         var videoTitle = $(this).attr("data-videoTitle");
         var audioTitle = $(this).attr("data-audioTitle");
+        var likes = $(this).attr("data-likes");
         $("#main-display").empty();
         $("#trending").empty();
         $("#side-search-bar").empty();
@@ -313,9 +315,9 @@ $(document).ready(function() {
         $("#main-display").append("<div id='audioPlayer'></div>");
         $("#main-display").append("<div id='videoPlayer'></div>");
         //addNumberInput($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, 7);
-        addLikeDisplay($("#main-display"), 25);
-        addLikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
-        addDislikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle);
+        addLikeDisplay($("#main-display"), likes);
+        addLikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, likes);
+        addDislikeButton($("#main-display"), videoId, audioId, thumbnail, videoTitle, audioTitle, likes);
         // firebaseToDisplay($("#trending"));
         onYouTubeIframeAPIReady(videoId);
         console.log("the audioID is: " + audioId);
@@ -357,10 +359,19 @@ $(document).ready(function() {
         $("<p>").html(likes)
             .attr("id", "likeDisplay")
             .appendTo(divId);
-
-
     }
-    function addLikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
+
+    function chancgeDislikes(divId, likes){
+        console.log("inside of change likes, the likes are: ", likes);
+        divId.html(likes--);
+    }
+
+    function chancgeLikes(divId, likes){
+        console.log("inside of change likes, the likes are: ", likes);
+        divId.html(likes++);
+    }
+
+    function addLikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle, likes) {
         $("<button>").html("Like ")
             .attr("id", "upVoteBtn")
             .addClass("btn btn-primary")
@@ -370,15 +381,17 @@ $(document).ready(function() {
             .data("thumbnail", thumbnail)
             .data("videoTitle", videoTitle)
             .data("audioTitle", audioTitle)
+            .data("likes", likes)
             .appendTo(divId)
             .on("click", function() {
                 console.log("liked");
+                chancgeLikes($("#likeDisplay"), likes);
                 upvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this)); //firebcse update prop in real time when ready.
                 unbindVoteButtons();
             });
     }
 
-    function addDislikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle) {
+    function addDislikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle, likes) {
         $("<button>").html("Dislike ")
             .attr("id", "downVoteBtn")
             .addClass("btn btn-danger")
@@ -388,12 +401,15 @@ $(document).ready(function() {
             .data("thumbnail", thumbnail)
             .data("videoTitle", videoTitle)
             .data("audioTitle", audioTitle)
+            .data("likes", likes)
             .appendTo(divId)
             .on("click", function() {
                 console.log("disliked");
+                chancgeDislikes($("#likeDisplay"), likes);
                 downvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this));
                 //firebcse update prop in real time when ready.
                 unbindVoteButtons();
+                
             });
     }
 
