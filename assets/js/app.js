@@ -321,6 +321,7 @@ $(document).ready(function() {
             .on("click", function() {
                 console.log("liked");
                 upvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this)); //firebcse update prop in real time when ready.
+                unbindVoteButtons();
             });
     }
 
@@ -339,6 +340,7 @@ $(document).ready(function() {
                 console.log("disliked");
                 downvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this));
                 //firebcse update prop in real time when ready.
+                unbindVoteButtons();
             });
     }
 
@@ -347,6 +349,11 @@ $(document).ready(function() {
             .attr("type", "text")
             .attr("id", "likesDisplay")
             .appendTo(divId)
+    }
+
+    function unbindVoteButtons() {
+      $("#upVoteBtn").unbind();
+      $("#downVoteBtn").unbind();
     }
 
     $(".btn-info").on("click", function() {
