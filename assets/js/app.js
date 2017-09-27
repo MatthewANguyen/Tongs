@@ -270,7 +270,7 @@ $(document).ready(function() {
         event.preventDefault();
         var emptyInput = $("#search-input1").val();
         if (emptyInput == "") {
-            console.log("What the heck")
+            // console.log("What the heck")
             return;
         }
         loadFromAjax(true);
@@ -279,7 +279,7 @@ $(document).ready(function() {
         event.preventDefault();
         var emptyInput = $("#search-input1").val();
         if (emptyInput == "") {
-            console.log("What the heck")
+            // console.log("What the heck")
             return;
         }
         loadFromAjax(false);
@@ -299,18 +299,18 @@ $(document).ready(function() {
         $("#side-search-bar").empty();
         $("#side-search-bar").append(
             $("<div>").addClass("col-md-2").append(
-                $("<div>").addClass("input-group home-small").append(
+                $("<div>").addClass("input-group home-small ").append(
                     $("<div>").addClass("input-group search"))
                 .append(
-                    $("<input>").attr("type", "text").attr("id", "search-input1").addClass("form-control-small").attr("placeholder", "Search for..."))
+                    $("<input>").attr("type", "text").attr("id", "search-input1").addClass("form-control-small sideSearch").attr("placeholder", "Search for..."))
                 .append(
-                    $("<button>").attr("type", "button").attr("id", "video1").addClass("btn-nav btn-primary btn-xs").text("Video")
+                    $("<button>").attr("type", "button").attr("id", "video1").addClass("btn-nav btn-info btn-xs sideVideoBtn").text("Video")
                     .on("click", function() {
                         event.preventDefault();
                         loadFromAjax(true);
                     }))
                 .append(
-                    $("<button>").attr("type", "button").attr("id", "audio1").addClass("btn-nav btn-secondary btn-xs").text("Audio")
+                    $("<button>").attr("type", "button").attr("id", "audio1").addClass("btn-nav btn-info btn-xs sideAudioBtn").text("Audio")
                     .on("click", function() {
                         event.preventDefault();
                         loadFromAjax(false);
@@ -378,7 +378,7 @@ $(document).ready(function() {
     }
 
     function addLikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle, likes) {
-        $("<button>").html("Like ")
+        $("<button>").html("Likes")
             .attr("id", "upVoteBtn")
             .addClass("btn btn-primary")
             .attr("type", "button")
@@ -394,7 +394,7 @@ $(document).ready(function() {
                 upvoteMashup($(this).data("videoId"), $(this).data("audioId"), $(this)); //firebcse update prop in real time when ready.
                 unbindVoteButtons();
             });
-            $("#likeDisplay").html("?");
+            $("#likeDisplay").html("");
     }
 
     function addDislikeButton(divId, videoId, audioId, thumbnail, videoTitle, audioTitle, likes) {
@@ -432,7 +432,7 @@ $(document).ready(function() {
 
 
     $(".btn-info").on("click", function() {
-        console.log("Yep it working")
+        // console.log("Yep it working")
     })
 
 

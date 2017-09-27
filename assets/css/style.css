@@ -83,8 +83,17 @@ h3:hover {
 .tittleDisplay{
 	display: inline;
 }
-#search-input1{
-	margin-bottom: 1%
+input.sideSearch{
+	margin-bottom: 3px;
+	border-radius:5px;
+	/*width:250px;*/
+
+}
+button.sideVideoBtn{
+	margin-right:5px;
+	background-color: blue;
+}
+button.sideAudioBtn{
 }
 
 img{
@@ -102,8 +111,8 @@ img:hover {
 	height:300px;
 }*/
 .grow img {
-  height: 100%;
-  width: 100%;
+  height: 90%;
+  width: 90%;
 
   -webkit-transition: all 1s ease;
      -moz-transition: all 1s ease;
@@ -113,25 +122,34 @@ img:hover {
 }
 
 .grow img:hover {
-  width: 110%;
-  height: 110%;
+  width: 105%;
+  height: 105%;
 }
 
 #upVoteBtn{
 	margin-right: 2%
 }
-#likesDisplay{
-	opacity:0;
+#audio1{
+	color: white;
+	background-color:purple
 }
-
-#likeDisplay {
-	background-color: white;
-	color: black;
-	border-style: groove;
-	border-width: 5px;
+#likeDisplay{
+	/*border: solid;*/
+	border-radius: 6px;
+	color:black;
+	opacity:0.7;
+	text-align: center;
+	font-size: 1.5em;
+	font-weight: bold;
+	padding-top: 2px auto;
+	padding-bottom: 2px auto;
+	border: solid 1px;
 	max-width: 100px;
-}
+	height:40px;
+	background-color: white;
+	border-width: 2px;
 
+}
 
 iframe{
   max-width: 100% !important
@@ -140,16 +158,33 @@ iframe{
 @media only screen and (max-width: 640px){
   	h3{
   		font-size: 150%
-
-
   	}
+  	input.sideSearch{
+		width:500px;
+		height:40px;
+	}
+	button.sideVideoBtn{
+		width:150px;
+	}
+	button.sideAudioBtn{
+		width:150px;
+	}
 }
 
 @media only screen and (max-width: 480px){
   	h3{
   		font-size:100%
-
   	}
+  	input.sideSearch{
+		width:300px;
+		height:40px;
+	}
+	button.sideVideoBtn{
+		width:100px;
+	}
+	button.sideAudioBtn{
+		width:100px;
+	}
 }
 @media only screen and (max-width: 320px){
   	h3{
@@ -159,11 +194,22 @@ iframe{
   	body{
   		font-size: 50%;
   	}
-}
-#audio1{
-	color: white;
-	background-color:purple
+  	input.sideSearch{
+		width:150px;
+		height:30px;
+	}
+	button.sideVideoBtn{
+		width:90px;
+	}
+	button.sideAudioBtn{
+		width:90px;
+	}
+
 }
 
+/*#likeDisplay[type="text"]{
+
+}
+*/
 
 
