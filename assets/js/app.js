@@ -164,13 +164,18 @@ function downvoteMashup(activeVideoID, activeAudioID, button) {
 
 function getRandomVideo() {
     // console.log("random video return");
-    return database.ref().child("trending").limitToLast(10).once("value").then(function(snapshot) {
+        database.ref().child("trending").limitToLast(10).once("value").then(function(snapshot) {
         // console.log(snapshot.val());
         var trendingArray = Object.values(snapshot.val());
         // console.log(trendingArray, Math.floor((Math.random()) * 10));
-        var randomEntry = trendingArray[Math.floor((Math.random()) * 10)]
+        var randomObject = trendingArray[Math.floor((Math.random()) * 10)];
         // console.log('run before', randomEntry);
-        return randomEntry.audioID;
+        var randomMashup = new displayItem(randomObject.videoTitle, randomObject.videoId, randomObject.thumbnail);
+        randomMashup.audioTitle = randomObject.audioTitle;
+        randomMashup.audioId = randomObject.audioId;
+        randomMashup.likes = randomObject.upvote;
+        display(randomMashup, 0, true, true);
+        console.log("random mashup");
     });
 }
 
@@ -183,7 +188,7 @@ function displayItem(videoTitle, videoId, thumbnail) {
     this.likes = 0;
 };
 
-function display(displayItem, num, isVideo) {
+function display(displayItem, num, isVideo, random) {
     if (num === 0) {
         $("#main-display").empty();
     }
@@ -194,12 +199,17 @@ function display(displayItem, num, isVideo) {
     displayDiv.attr("data-audioTitle", displayItem.audioTitle);
     displayDiv.attr("data-videoTitle", displayItem.videoTitle);
     displayDiv.attr("data-likes", displayItem.likes);
-    if (isVideo) {
-        $(displayDiv).attr("data-videoId", displayItem.videoId);
-        $(displayDiv).attr("data-audioId", randomAudio()); //getRandomVideo();
+    if(!random){  
+      if (isVideo) {
+          $(displayDiv).attr("data-videoId", displayItem.videoId);
+          $(displayDiv).attr("data-audioId", randomAudio()); //getRandomVideo();
+      } else {
+          $(displayDiv).attr("data-videoId", randomVideo()); //getRandomVideo();
+          $(displayDiv).attr("data-audioId", displayItem.audioId);
+      }
     } else {
-        $(displayDiv).attr("data-videoId", randomVideo()); //getRandomVideo();
-        $(displayDiv).attr("data-audioId", displayItem.audioId);
+      $(displayDiv).attr("data-videoId", displayItem.videoId);
+          $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
     if (isVideo) {
         // Add image to container
@@ -283,6 +293,12 @@ $(document).ready(function() {
             return;
         }
         loadFromAjax(false);
+    });
+
+    $("#random1").on("click", function() {
+        event.preventDefault();
+        var emptyInput = $("#search-input1").val();
+        getRandomVideo();
     });
 
     // $(".resultCard").on("click", function() {
