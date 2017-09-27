@@ -83,6 +83,9 @@ h3:hover {
 .tittleDisplay{
 	display: inline;
 }
+#search-input1{
+	margin-bottom: 1%
+}
 
 img{
 	border-radius: 5%;
