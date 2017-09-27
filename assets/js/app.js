@@ -356,7 +356,25 @@ $(document).ready(function() {
       $("#downVoteBtn").unbind();
     }
 
+    function readFirebaseTrending() {
+      var arrayOfTrending = [];
+      database.ref().child("trending").orderByChild("upvotes").limitToLast(5).once("value").then(function(snapshot) {
+        var snapshot = snapshot.val();
+        for (var key in snapshot) {
+            var result = new displayItem(snapshot[key].videoTitle, snapshot[key].videoId, snapshot[key].thumbnail);
+            result.audioTitle = snapshot[key].audioTitle;
+            result.audioId = snapshot[key].audioId;
+            result.likes = snapshot[key].upvotes;
+            arrayOfTrending.push(result);
+        }
+        console.log(arrayOfTrending);
+        return arrayOfTrending;
+      });
+    }
+
     $(".btn-info").on("click", function() {
         console.log("Yep it working")
     })
+
+    readFirebaseTrending();
 });
