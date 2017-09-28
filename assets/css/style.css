@@ -12,6 +12,7 @@ header {
 	text-align: center;
 	font-family: 'Yantramanav', sans-serif;
 	font-weight: 100;
+	color:white;
 	margin: 20px 0;
 
 }
@@ -26,7 +27,7 @@ h3:hover {
 }
 
 #purpose {
-    color: blue;
+    color: white;
     /*text-shadow: 2px 2px 2px #CCCCCC;*//*shadow Effect*/
     /*color: #ECECF6;*/
     text-shadow: -1px -1px 1px #FFFFFF, 1px 1px 1px #000000;
