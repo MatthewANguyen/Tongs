@@ -1,4 +1,4 @@
-audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI", "y6120QOlsfU", "XUhVCoTsBaM", "r0KFfXiBLqk", "NTa6Xbzfq1U", "Y82jDHRrswc"];
+audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI", "y6120QOlsfU", "XUhVCoTsBaM", "r0KFfXiBLqk", "NTa6Xbzfq1U", "Y82jDHRrswc", "ZnHmskwqCCQ"];
 videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA"];
 // Initialize Firebase
 var config = {
@@ -164,11 +164,11 @@ function downvoteMashup(activeVideoID, activeAudioID, button) {
 
 function getRandomVideo() {
     // console.log("random video return");
-        database.ref().child("trending").limitToLast(10).once("value").then(function(snapshot) {
+        database.ref().child("trending").limitToLast(25).once("value").then(function(snapshot) {
         // console.log(snapshot.val());
         var trendingArray = Object.values(snapshot.val());
         // console.log(trendingArray, Math.floor((Math.random()) * 10));
-        var randomObject = trendingArray[Math.floor((Math.random()) * 10)];
+        var randomObject = trendingArray[Math.floor((Math.random()) * 25)];
         // console.log('run before', randomEntry);
         var randomMashup = new displayItem(randomObject.videoTitle, randomObject.videoId, randomObject.thumbnail);
         randomMashup.audioTitle = randomObject.audioTitle;
@@ -209,7 +209,7 @@ function display(displayItem, num, isVideo, random) {
       }
     } else {
       $(displayDiv).attr("data-videoId", displayItem.videoId);
-          $(displayDiv).attr("data-audioId", displayItem.audioId);
+      $(displayDiv).attr("data-audioId", displayItem.audioId);
     }
     if (isVideo) {
         // Add image to container
@@ -330,6 +330,12 @@ $(document).ready(function() {
                     .on("click", function() {
                         event.preventDefault();
                         loadFromAjax(false);
+                    }))
+                .append(
+                    $("<button>").attr("type", "button").attr("id", "random1").addClass("btn-nav btn-info btn-xs sideAudioBtn").text("Random")
+                    .on("click", function() {
+                        event.preventDefault();
+                        getRandomVideo();
                     }))
             )
         );
