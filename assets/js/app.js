@@ -1,5 +1,5 @@
-audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI", "y6120QOlsfU", "XUhVCoTsBaM", "r0KFfXiBLqk", "NTa6Xbzfq1U", "Y82jDHRrswc", "ZnHmskwqCCQ"];
-videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA"];
+audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI", "y6120QOlsfU", "XUhVCoTsBaM", "r0KFfXiBLqk", "NTa6Xbzfq1U", "Y82jDHRrswc", "ZnHmskwqCCQ", "7zkX6kfnWbk"];
+videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA", "7zkX6kfnWbk"];
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyC2HA7n0Xg2eXr8chPxyWFGr8dgNM6UWbY",
@@ -86,7 +86,7 @@ function saveMashup(button) {
 }
 
 function randomVideo() {
-    var randomNumber = audioIdArray.length;
+    var randomNumber = videoIdArray.length;
     var randomEntry = Math.floor((Math.random()) * randomNumber)
     return videoIdArray[randomEntry];
 };
