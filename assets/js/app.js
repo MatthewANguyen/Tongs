@@ -1,5 +1,5 @@
-audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI", "y6120QOlsfU", "XUhVCoTsBaM", "r0KFfXiBLqk", "NTa6Xbzfq1U", "Y82jDHRrswc", "ZnHmskwqCCQ", "7zkX6kfnWbk"];
-videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA", "7zkX6kfnWbk"];
+audioIdArray = ["ferZnZ0_rSM", "yL9bRzwk0Ds", "Qx4tM7z3bhs", "R1j1RRWcYSg", "GTUIlOudlHI", "y6120QOlsfU", "XUhVCoTsBaM", "r0KFfXiBLqk", "NTa6Xbzfq1U", "Y82jDHRrswc", "ZnHmskwqCCQ", "7zkX6kfnWbk", "O5lJyw_VmHw"];
+videoIdArray = ["dA2j8Rq17aY", "3UUZgiQHlQU", "EJ80y2cSlFk", "7WLrL_sOpbA", "7zkX6kfnWbk", "O5lJyw_VmHw"];
 // Initialize Firebase
 var config = {
     apiKey: "AIzaSyC2HA7n0Xg2eXr8chPxyWFGr8dgNM6UWbY",
@@ -165,7 +165,7 @@ function downvoteMashup(activeVideoID, activeAudioID, button) {
 function getRandomVideo() {
     // console.log("random video return");
         database.ref().child("trending").limitToLast(25).once("value").then(function(snapshot) {
-        // console.log(snapshot.val());
+        console.log(snapshot.val());
         var trendingArray = Object.values(snapshot.val());
         // console.log(trendingArray, Math.floor((Math.random()) * 10));
         var randomObject = trendingArray[Math.floor((Math.random()) * 25)];
