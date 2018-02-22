@@ -1,10 +1,14 @@
 html {
 	height: 100%;
-
 }
+
+
+
 body{
-/*	background-color: blue;*/
-/* background-image:url(./assets/images/background.jpg) not working*/
+	background: url('../images/tongs.jpg');
+	/*	background-color: blue;*/
+	/* background-image:url(./assets/images/background.jpg) not working*/
+
 }
 
 header {
@@ -27,11 +31,10 @@ h3:hover {
 }
 
 #purpose {
-    color: white;
+    color: black;
     /*text-shadow: 2px 2px 2px #CCCCCC;*//*shadow Effect*/
     /*color: #ECECF6;*/
     text-shadow: -1px -1px 1px #FFFFFF, 1px 1px 1px #000000;
-    opacity: 0.5;
     font-size: 100%;
     margin-top: 25px;
     text-align: center;
